@@ -15,7 +15,7 @@ public class WaitForAnimation : CustomYieldInstruction
     //コンストラクタ
     public WaitForAnimation(Animator _anim, int _layerNo)
     {
-        Init(_anim, _layerNo, _anim.GetCurrentAnimatorStateInfo(_layerNo).nameHash);
+        Init(_anim, _layerNo, _anim.GetCurrentAnimatorStateInfo(_layerNo).fullPathHash);
     }
 
     //初期化処理
