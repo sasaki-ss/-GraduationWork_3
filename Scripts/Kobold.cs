@@ -4,25 +4,38 @@ using UnityEngine;
 
 public class Kobold : MonoBehaviour
 {
-    [SerializeField]
-    private Animator anim;
+    private bool isCoolDown;    //クールダウンフラグ
+
+    private Animator anim;      //アニメーター
 
     private void Start()
     {
+        isCoolDown = false;
         anim = this.GetComponent<Animator>();
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            anim.SetBool("isAttack", true);
-            anim.SetBool("isMove", true);
-        }
+        
+    }
 
-        if (Input.GetKeyDown(KeyCode.Escape))
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if(other.gameObject.tag == "Player" && !isCoolDown)
         {
-            anim.SetBool("isAttack", false);
+            StartCoroutine(Attack());
         }
+    }
+
+    //攻撃処理
+    private IEnumerator Attack()
+    {
+        anim.SetBool("isAttack", true);
+        isCoolDown = true;
+
+        yield return null;
+        yield return new WaitForAnimation(anim, 0);
+
+        anim.SetBool("isAttack", false);
     }
 }
