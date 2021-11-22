@@ -18,7 +18,7 @@ public class Player : MonoBehaviour
         anim = GetComponent<Animator>();
 
         speed = 0.015f;
-        jumpPower = 70.0f;
+        jumpPower = 50.0f;
     }
 
     // Update is called once per frame
@@ -36,14 +36,14 @@ public class Player : MonoBehaviour
             sr.flipX = true;
             anim.SetFloat("Speed", speed);
         }
-
+        if(Input.GetKeyUp(KeyCode.A)) anim.SetFloat("Speed", -1);
         if (Input.GetKey(KeyCode.D))
         {   //‰EˆÚ“®
             transform.position += new Vector3(speed, 0, 0);
             sr.flipX = false;
             anim.SetFloat("Speed", speed);
         }
-
+        if (Input.GetKeyUp(KeyCode.D)) anim.SetFloat("Speed", -1);
     }
     void Jump()
     {
