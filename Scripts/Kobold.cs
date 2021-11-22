@@ -2,26 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Kobold : MonoBehaviour
+public class Kobold : Enemy
 {
-    private bool isCoolDown;    //クールダウンフラグ
-
-    private Animator anim;      //アニメーター
-
     private void Start()
     {
+        coolCnt = 0f;
+        coolTime = 3f;
         isCoolDown = false;
         anim = this.GetComponent<Animator>();
+        eCollision = collisionObj.GetComponent<EnemyCollision>();
     }
 
     private void Update()
     {
-        
-    }
+        CoolTime();
 
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        if(other.gameObject.tag == "Player" && !isCoolDown)
+        if (!isCoolDown && eCollision.isAttack)
         {
             StartCoroutine(Attack());
         }
@@ -37,5 +33,10 @@ public class Kobold : MonoBehaviour
         yield return new WaitForAnimation(anim, 0);
 
         anim.SetBool("isAttack", false);
+    }
+
+    private void Move()
+    {
+        anim.SetBool("isMove", true);
     }
 }
