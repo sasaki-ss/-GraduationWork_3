@@ -6,12 +6,15 @@ public class Kobold : Enemy
 {
     private void Start()
     {
+        Init();
+
         coolCnt = 0f;
         coolTime = 3f;
         trackingDistance = 5f;
         moveSpeed = 0.03f;
         waitTime = 3f;
-        colOffset = new Vector3(0.3f, -0.245f);
+        colOffset[0] = new Vector2(0.3f, -0.245f);
+        colOffset[1] = new Vector2(0.26f, -0.26f);
         isCoolDown = false;
         isWait = false;
         isAttack = false;
@@ -22,8 +25,10 @@ public class Kobold : Enemy
         player = GameObject.Find("Player");
         anim = this.GetComponent<Animator>();
         sr = this.GetComponent<SpriteRenderer>();
-        bc2 = collisionObj.GetComponent<BoxCollider2D>();
-        eCollision = collisionObj.GetComponent<EnemyCollision>();
+        bc2[0] = collisionObj[0].GetComponent<BoxCollider2D>();
+        eCollision[0] = collisionObj[0].GetComponent<EnemyCollision>();
+        bc2[1] = collisionObj[1].GetComponent<BoxCollider2D>();
+        eCollision[1] = collisionObj[1].GetComponent<EnemyCollision>();
     }
 
     private void Update()
@@ -32,7 +37,7 @@ public class Kobold : Enemy
 
         TrackingJudgment();
 
-        if (!isCoolDown && eCollision.isAttack)
+        if (!isCoolDown && eCollision[0].isInvasion)
         {
             StateChange(EnemyState.Attack);
         }

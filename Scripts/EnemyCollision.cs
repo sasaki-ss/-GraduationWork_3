@@ -8,7 +8,7 @@ public class EnemyCollision : MonoBehaviour
     private bool isStay;    //侵入中フラグ
     private bool isExit;    //退出フラグ
 
-    public bool isAttack { get; private set; }  //攻撃フラグ
+    public bool isInvasion { get; private set; }  //攻撃フラグ
 
     private void Start()
     {
@@ -16,16 +16,16 @@ public class EnemyCollision : MonoBehaviour
         isStay = false;
         isExit = false;
 
-        isAttack = false;
+        isInvasion = false;
     }
 
     private void Update()
     {
-        isAttack = false;
+        isInvasion = false;
 
         if (isEnter || isStay)
         {
-            isAttack = true;
+            isInvasion = true;
         }
 
         if (isEnter)

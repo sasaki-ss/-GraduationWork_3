@@ -39,7 +39,7 @@ public class Enemy : MonoBehaviour
     protected bool              isAttack;           //攻撃フラグ
     protected bool              isTracking;         //追跡フラグ
 
-    protected Vector2           colOffset;          //当たり判定の偏り値
+    protected Vector2[]         colOffset;          //当たり判定の偏り値
 
     protected Direction         dir;                //方向
 
@@ -48,16 +48,23 @@ public class Enemy : MonoBehaviour
     protected EnemyState        state;              //状態
 
     [SerializeField]
-    protected GameObject        collisionObj;       //当たり判定オブジェクト
+    protected GameObject[]      collisionObj;       //当たり判定オブジェクト
     protected GameObject        player;             //プレイヤーオブジェクト
 
     protected Animator          anim;               //アニメーター
 
-    protected BoxCollider2D     bc2;                //ボックスコライダー2d
+    protected BoxCollider2D[]   bc2;                //ボックスコライダー2d
 
     protected SpriteRenderer    sr;                 //スプライトレンダラー
 
-    protected EnemyCollision    eCollision;         //当たり判定用の処理
+    protected EnemyCollision[]  eCollision;         //当たり判定用の処理
+
+    protected void Init()
+    {
+        bc2 = new BoxCollider2D[2];
+        eCollision = new EnemyCollision[2];
+        colOffset = new Vector2[2];
+    }
 
     protected void StateChange(EnemyState _state)
     {
@@ -90,10 +97,10 @@ public class Enemy : MonoBehaviour
 
         if (isTracking)
         {
-            if (player.transform.position.x < this.transform.position.x)
+            if (player.transform.position.x < this.transform.position.x - 0.02)
                 dir = Direction.Left;
 
-            if (player.transform.position.x > this.transform.position.x)
+            if (player.transform.position.x > this.transform.position.x + 0.02)
                 dir = Direction.Right;
         }
 
@@ -124,6 +131,7 @@ public class Enemy : MonoBehaviour
         if (state == EnemyState.Tracking)
         {
             StateChange(EnemyState.Wait);
+            anim.SetBool("isMove", false);
             isTracking = false;
         }
     }
@@ -165,14 +173,16 @@ public class Enemy : MonoBehaviour
         if(dir == Direction.Left)
         {
             sr.flipX = false;
-            bc2.offset = new Vector2(-colOffset.x, colOffset.y);
+            bc2[0].offset = new Vector2(-colOffset[0].x, colOffset[0].y);
+            bc2[1].offset = new Vector2(-colOffset[1].x, colOffset[1].y);
             //this.transform.position -= new Vector3(0.03f, 0f, 0f);
         }
 
         if(dir == Direction.Right)
         {
             sr.flipX = true;
-            bc2.offset = new Vector2(colOffset.x, colOffset.y);
+            bc2[0].offset = new Vector2(colOffset[0].x, colOffset[0].y);
+            bc2[1].offset = new Vector2(colOffset[1].x, colOffset[1].y);
         }
 
     }
@@ -180,20 +190,22 @@ public class Enemy : MonoBehaviour
     //追跡処理
     protected void Tracking()
     {
-        if (!eCollision.isAttack)
+        if (!eCollision[0].isInvasion)
         {
             anim.SetBool("isMove", true);
             if (dir == Direction.Left)
             {
                 sr.flipX = false;
-                bc2.offset = new Vector2(-colOffset.x, colOffset.y);
+                bc2[0].offset = new Vector2(-colOffset[0].x, colOffset[0].y);
+                bc2[1].offset = new Vector2(-colOffset[1].x, colOffset[1].y);
                 this.transform.position -= new Vector3(moveSpeed, 0f, 0f);
             }
 
             if (dir == Direction.Right)
             {
                 sr.flipX = true;
-                bc2.offset = new Vector2(colOffset.x, colOffset.y);
+                bc2[0].offset = new Vector2(colOffset[0].x, colOffset[0].y);
+                bc2[1].offset = new Vector2(colOffset[1].x, colOffset[1].y);
                 this.transform.position += new Vector3(moveSpeed, 0f, 0f);
             }
         }
