@@ -11,14 +11,21 @@ public class Player : MonoBehaviour
     private float speed;
     private float jumpPower;
 
+    private const int MaxJumpCount = 2;
+    private int jumpCount;
+
+    private int count;
     void Start()
     {
         sr = GetComponent<SpriteRenderer>();
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
 
-        speed = 0.015f;
-        jumpPower = 50.0f;
+        speed = 0.1f;
+        jumpPower = 280.0f;
+        jumpCount = 0;
+
+        count = 0;
     }
 
     // Update is called once per frame
@@ -26,6 +33,8 @@ public class Player : MonoBehaviour
     {
         Walk();
         Jump();
+        count++;
+        if (60 < count) jumpCount = 0;
     }
 
     void Walk()
@@ -48,10 +57,12 @@ public class Player : MonoBehaviour
     }
     void Jump()
     {
-        if (Input.GetKey(KeyCode.Space))
+        if (Input.GetKey(KeyCode.Space) && jumpCount <MaxJumpCount && 30 < count)
         {
             rb.velocity = Vector2.zero;
             rb.AddForce(jumpPower * Vector2.up);
+            jumpCount++;
+            count = 0;
         }
     }
 }
