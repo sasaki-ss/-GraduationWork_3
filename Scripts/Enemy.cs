@@ -85,11 +85,21 @@ public class Enemy : MonoBehaviour
 
     protected void TrackingJudgment()
     {
-        if (state == EnemyState.Wait || state == EnemyState.Attack) return;
+        if (isTracking &&
+            (state == EnemyState.Wait || state == EnemyState.Attack)) return;
 
-        if(dir == Direction.Left)
+        if (isTracking)
         {
-            if(player.transform.position.x >=
+            if (player.transform.position.x < this.transform.position.x)
+                dir = Direction.Left;
+
+            if (player.transform.position.x > this.transform.position.x)
+                dir = Direction.Right;
+        }
+
+        if (dir == Direction.Left)
+        {
+            if (player.transform.position.x >=
                 this.transform.position.x - trackingDistance &&
                 player.transform.position.x <= this.transform.position.x)
             {
@@ -99,9 +109,9 @@ public class Enemy : MonoBehaviour
             }
         }
 
-        if(dir == Direction.Right)
+        if (dir == Direction.Right)
         {
-            if(player.transform.position.x <=
+            if (player.transform.position.x <=
                 this.transform.position.x + trackingDistance &&
                 player.transform.position.x >= this.transform.position.x)
             {
@@ -111,7 +121,11 @@ public class Enemy : MonoBehaviour
             }
         }
 
-        if (state == EnemyState.Tracking) StateChange(EnemyState.Wait);
+        if (state == EnemyState.Tracking)
+        {
+            StateChange(EnemyState.Wait);
+            isTracking = false;
+        }
     }
 
     //ë“ã@èàóù
