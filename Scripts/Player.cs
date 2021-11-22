@@ -37,6 +37,7 @@ public class Player : MonoBehaviour
             anim.SetFloat("Speed", speed);
         }
         if(Input.GetKeyUp(KeyCode.A)) anim.SetFloat("Speed", -1);
+
         if (Input.GetKey(KeyCode.D))
         {   //‰EˆÚ“®
             transform.position += new Vector3(speed, 0, 0);
