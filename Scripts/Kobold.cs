@@ -8,8 +8,21 @@ public class Kobold : Enemy
     {
         coolCnt = 0f;
         coolTime = 3f;
+        trackingDistance = 5f;
+        moveSpeed = 0.03f;
+        waitTime = 3f;
+        colOffset = new Vector3(0.3f, -0.245f);
         isCoolDown = false;
+        isWait = false;
+        isAttack = false;
+        dir = Direction.Left;
+        beforeState = EnemyState.Wait;
+        state = EnemyState.Wait;
+
+        player = GameObject.Find("Player");
         anim = this.GetComponent<Animator>();
+        sr = this.GetComponent<SpriteRenderer>();
+        bc2 = collisionObj.GetComponent<BoxCollider2D>();
         eCollision = collisionObj.GetComponent<EnemyCollision>();
     }
 
@@ -17,26 +30,42 @@ public class Kobold : Enemy
     {
         CoolTime();
 
+        TrackingJudgment();
+
         if (!isCoolDown && eCollision.isAttack)
         {
-            StartCoroutine(Attack());
+            StateChange(EnemyState.Attack);
         }
-    }
 
-    //çUåÇèàóù
-    private IEnumerator Attack()
-    {
-        anim.SetBool("isAttack", true);
-        isCoolDown = true;
-
-        yield return null;
-        yield return new WaitForAnimation(anim, 0);
-
-        anim.SetBool("isAttack", false);
-    }
-
-    private void Move()
-    {
-        anim.SetBool("isMove", true);
+        switch (state)
+        {
+            case EnemyState.Wait:
+                if (!isWait)
+                {
+                    isWait = true;
+                    if(beforeState == EnemyState.Attack)
+                    {
+                        StartCoroutine(Wait(waitTime / 2));
+                    }
+                    else
+                    {
+                        StartCoroutine(Wait(waitTime));
+                    }
+                }
+                break;
+            case EnemyState.Move:
+                //Move();
+                break;
+            case EnemyState.Attack:
+                if (!isAttack)
+                {
+                    isAttack = true;
+                    StartCoroutine(Attack());
+                }
+                break;
+            case EnemyState.Tracking:
+                Tracking();
+                break;
+        }
     }
 }

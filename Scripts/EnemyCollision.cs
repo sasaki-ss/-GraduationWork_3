@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class EnemyCollision : MonoBehaviour
 {
-    private bool isEnter;
-    private bool isStay;
-    private bool isExit;
+    private bool isEnter;   //侵入フラグ
+    private bool isStay;    //侵入中フラグ
+    private bool isExit;    //退出フラグ
 
-    public bool isAttack { get; private set; }
+    public bool isAttack { get; private set; }  //攻撃フラグ
 
     private void Start()
     {
@@ -23,7 +23,7 @@ public class EnemyCollision : MonoBehaviour
     {
         isAttack = false;
 
-        if (isEnter || isStay || isExit)
+        if (isEnter || isStay)
         {
             isAttack = true;
         }
