@@ -18,7 +18,7 @@ public class WallContact : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if(collision.tag != "Untagged")
+        if(collision.tag == "Floor" || collision.tag == "Wall")
         {
             Contact = true;
         }

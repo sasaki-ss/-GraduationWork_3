@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -48,6 +46,7 @@ public class Player : MonoBehaviour
     {
         Walk();
         Jump();
+        Shot();
         count++;
         if (60 < count) jumpCount = 0;
     }
@@ -68,6 +67,7 @@ public class Player : MonoBehaviour
         }
         else anim.SetFloat("Speed", -1);
     }
+
     void Jump()
     {
         if (Input.GetKey(KeyCode.Space) && jumpCount <MaxJumpCount && 30 < count)
@@ -77,5 +77,14 @@ public class Player : MonoBehaviour
             jumpCount++;
             count = 0;
         }
+    }
+
+    void Shot()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            Debug.Log("Pressed primary button.");
+        }
+
     }
 }
