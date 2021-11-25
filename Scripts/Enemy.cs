@@ -18,18 +18,13 @@ public class Enemy : MonoBehaviour
         Right   //右
     }
 
-    public enum MoveState
-    {
-        MoveOne,
-        MoveTwo,
-    }
-
     protected int               hp;                 //体力
-
     protected float             atk;                //攻撃力
     protected float             def;                //防御力
+
     protected float             trackingDistance;   //追跡距離
     protected float             moveSpeed;          //移動速度
+
     protected float             waitTime;           //待機時間
     protected float             coolTime;           //クールタイム
     protected float             coolCnt;            //現在のクールカウント
@@ -40,7 +35,6 @@ public class Enemy : MonoBehaviour
     protected bool              isTracking;         //追跡フラグ
 
     protected Vector2[]         colOffset;          //当たり判定の偏り値
-
     protected Direction         dir;                //方向
 
     protected EnemyState        beforeState;        //一つ前の状態
@@ -50,28 +44,27 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     protected GameObject[]      collisionObj;       //当たり判定オブジェクト
     protected GameObject        player;             //プレイヤーオブジェクト
-
     protected Animator          anim;               //アニメーター
-
     protected BoxCollider2D[]   bc2;                //ボックスコライダー2d
-
     protected SpriteRenderer    sr;                 //スプライトレンダラー
+    protected EnemyCollision    eCollision;         //当たり判定用の処理
+    protected WallContact       wallContact;        //壁判定用の処理
 
-    protected EnemyCollision[]  eCollision;         //当たり判定用の処理
-
+    //初期化処理
     protected void Init()
     {
         bc2 = new BoxCollider2D[2];
-        eCollision = new EnemyCollision[2];
         colOffset = new Vector2[2];
     }
 
+    //状態変化処理
     protected void StateChange(EnemyState _state)
     {
         beforeState = state;
         state = _state;
     }
 
+    //クールダウン処理
     protected void CoolTime()
     {
         //クールダウンフラグがオンの場合
@@ -90,13 +83,18 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    //追跡判定処理
     protected void TrackingJudgment()
     {
-        if (isTracking &&
-            (state == EnemyState.Wait || state == EnemyState.Attack)) return;
-
         if (isTracking)
         {
+            //状態がWaitまたはAttackのとき
+            if(state == EnemyState.Wait || state == EnemyState.Attack)
+            {
+                isTracking = false;
+                return;
+            }
+
             if (player.transform.position.x < this.transform.position.x - 0.02)
                 dir = Direction.Left;
 
@@ -133,6 +131,7 @@ public class Enemy : MonoBehaviour
             StateChange(EnemyState.Wait);
             anim.SetBool("isMove", false);
             isTracking = false;
+            isWait = false;
         }
     }
 
@@ -154,7 +153,6 @@ public class Enemy : MonoBehaviour
     protected IEnumerator Attack()
     {
         anim.SetBool("isAttack", true);
-        isCoolDown = true;
 
         yield return null;
         yield return new WaitForAnimation(anim, 0);
@@ -163,19 +161,39 @@ public class Enemy : MonoBehaviour
         StateChange(EnemyState.Wait);
         isWait = false;
         isAttack = false;
+        isCoolDown = true;
     }
 
-    //移動処理(非追跡時)
-    protected void Move()
+    //追跡処理
+    protected void Tracking()
     {
-        anim.SetBool("isMove", true);
+        if (!eCollision.isInvasion && !isAttack)
+        {
+            MoveProc();
+        }
+        else
+        {
+            anim.SetBool("isMove", false);
+        }
+    }
 
-        if(dir == Direction.Left)
+    protected void MoveProc()
+    {
+        if (dir == Direction.Left)
         {
             sr.flipX = false;
             bc2[0].offset = new Vector2(-colOffset[0].x, colOffset[0].y);
             bc2[1].offset = new Vector2(-colOffset[1].x, colOffset[1].y);
-            //this.transform.position -= new Vector3(0.03f, 0f, 0f);
+
+            if (!wallContact.getContact)
+            {
+                anim.SetBool("isMove", true);
+                this.transform.position -= new Vector3(moveSpeed, 0f, 0f);
+            }
+            else
+            {
+                anim.SetBool("isMove", false);
+            }
         }
 
         if(dir == Direction.Right)
@@ -183,35 +201,16 @@ public class Enemy : MonoBehaviour
             sr.flipX = true;
             bc2[0].offset = new Vector2(colOffset[0].x, colOffset[0].y);
             bc2[1].offset = new Vector2(colOffset[1].x, colOffset[1].y);
-        }
 
-    }
-
-    //追跡処理
-    protected void Tracking()
-    {
-        if (!eCollision[0].isInvasion)
-        {
-            anim.SetBool("isMove", true);
-            if (dir == Direction.Left)
+            if (!wallContact.getContact)
             {
-                sr.flipX = false;
-                bc2[0].offset = new Vector2(-colOffset[0].x, colOffset[0].y);
-                bc2[1].offset = new Vector2(-colOffset[1].x, colOffset[1].y);
-                this.transform.position -= new Vector3(moveSpeed, 0f, 0f);
-            }
-
-            if (dir == Direction.Right)
-            {
-                sr.flipX = true;
-                bc2[0].offset = new Vector2(colOffset[0].x, colOffset[0].y);
-                bc2[1].offset = new Vector2(colOffset[1].x, colOffset[1].y);
+                anim.SetBool("isMove", true);
                 this.transform.position += new Vector3(moveSpeed, 0f, 0f);
             }
-        }
-        else
-        {
-            anim.SetBool("isMove", false);
+            else
+            {
+                anim.SetBool("isMove", false);
+            }
         }
     }
 }

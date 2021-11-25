@@ -250,7 +250,7 @@ GameObject:
   m_Component:
   - component: {fileID: 677367680065556791}
   - component: {fileID: 7114431975748393015}
-  - component: {fileID: 7213507568159995485}
+  - component: {fileID: 4093631924285781559}
   m_Layer: 0
   m_Name: WallChecker
   m_TagString: Untagged
@@ -298,7 +298,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.09775674, y: 0.5225482}
   m_EdgeRadius: 0
---- !u!114 &7213507568159995485
+--- !u!114 &4093631924285781559
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -307,6 +307,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 5582036323935046144}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0d5d42e92a9fb1040914ea6db9f26b50, type: 3}
+  m_Script: {fileID: 11500000, guid: ec0e643907b03424d8eb784bfe646e75, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
