@@ -8,12 +8,20 @@ public class Player : MonoBehaviour
     Animator anim;
 
     //ステータス
-    private float speed;
-    private float jumpPower;
-    private int jumpCount;
+    private float speed;        //移動速度
+    private float jumpPower;    //ジャンプの高さ
+    private int jumpCount;      //ジャンプ回数のカウント
+
+    //弾関連
+    private GameObject MagicArray;  //魔法陣
+    private GameObject shot_0;      //弾
+    private int shot_speed;         //弾の速度
+    private int cooltime;           //弾発射のクールタイム
+    
 
     //定数
-    private const int MaxJumpCount = 2;
+    private const int MaxJumpCount = 2; //最大ジャンプ回数
+    private const int CoolTime0 = 5;    //shot_0のクールタイム
 
     //フレームカウント
     private int count;
@@ -21,24 +29,43 @@ public class Player : MonoBehaviour
     //壁判定
     GameObject[] _wallContact;
     WallContact[] scr_WallContact;
+
+    //床判定
+    GameObject _floorContact;
+    FloorContact scr_FloorContact;
+
     void Start()
     {
+        //プレイヤーのコンポーネント
         sr = GetComponent<SpriteRenderer>();
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
 
+        //ステータス
         speed = 0.1f;
         jumpPower = 280.0f;
         jumpCount = 0;
 
+        //弾関連
+        MagicArray = transform.Find("PlayerShot/MagicArray").gameObject;
+        shot_0 = (GameObject)Resources.Load("shot_0");
+        shot_speed = 20;
+        cooltime = 0;
+
+        //フレームカウント
         count = 0;
 
+        //壁判定
         _wallContact = new GameObject[2];
         scr_WallContact = new WallContact[2];
         _wallContact[0] = transform.Find("Contact_L").gameObject;
         _wallContact[1] = transform.Find("Contact_R").gameObject;
         scr_WallContact[0] = _wallContact[0].GetComponent<WallContact>();
         scr_WallContact[1] = _wallContact[1].GetComponent<WallContact>();
+
+        //床判定
+        _floorContact = transform.Find("Contact_Down").gameObject;
+        scr_FloorContact = _floorContact.GetComponent<FloorContact>();
     }
 
     // Update is called once per frame
@@ -48,7 +75,7 @@ public class Player : MonoBehaviour
         Jump();
         Shot();
         count++;
-        if (60 < count) jumpCount = 0;
+        cooltime++;
     }
 
     void Walk()
@@ -72,19 +99,40 @@ public class Player : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.Space) && jumpCount <MaxJumpCount && 30 < count)
         {
-            rb.velocity = Vector2.zero;
-            rb.AddForce(jumpPower * Vector2.up);
-            jumpCount++;
-            count = 0;
+            rb.velocity = Vector2.zero;             //速度リセット
+            rb.AddForce(jumpPower * Vector2.up);    //力を加える
+            jumpCount++;                            //カウント加算
+            count = 0;                              //ジャンプのクールタイムリセット
         }
+
+        if (scr_FloorContact.getFloorContact) jumpCount = 0;    //ジャンプ回数リセット
     }
 
     void Shot()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButton(0))        //左クリック
         {
-            Debug.Log("Pressed primary button.");
+            if (CoolTime0 < cooltime)
+            {
+                //生成
+                GameObject shot = Instantiate(shot_0, MagicArray.transform.position, Quaternion.identity);
+
+                // クリックした座標の取得（スクリーン座標からワールド座標に変換）
+                Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+                // 向きの生成（Z成分の除去と正規化）
+                Vector3 shotForward = Vector3.Scale((mouseWorldPos - transform.position), new Vector3(1, 1, 0)).normalized;
+
+                // 弾に速度を与える
+                shot.GetComponent<Rigidbody2D>().velocity = shotForward * shot_speed;
+
+                cooltime = 0;   //クールタイムリセット
+            }
         }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
 
     }
 }
