@@ -97,15 +97,19 @@ public class Player : MonoBehaviour
 
     void Jump()
     {
-        if (Input.GetKey(KeyCode.Space) && jumpCount <MaxJumpCount && 30 < count)
+        if (Input.GetKey(KeyCode.Space) && jumpCount < MaxJumpCount && 30 < count)
         {
             rb.velocity = Vector2.zero;             //速度リセット
             rb.AddForce(jumpPower * Vector2.up);    //力を加える
-            jumpCount++;                            //カウント加算
+            if(jumpCount == 0)jumpCount = 1;        //カウント加算
+            if(jumpCount == 1)jumpCount = 2;        //カウント加算
             count = 0;                              //ジャンプのクールタイムリセット
         }
 
-        if (scr_FloorContact.getFloorContact) jumpCount = 0;    //ジャンプ回数リセット
+        if (scr_FloorContact.getFloorContact)
+        {
+            jumpCount = 0;    //ジャンプ回数リセット
+        }
     }
 
     void Shot()
