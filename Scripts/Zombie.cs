@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Wizard : Enemy
+public class Zombie : Enemy
 {
     private void Start()
     {
@@ -17,9 +17,9 @@ public class Wizard : Enemy
         wallContact = collisionObj[1].GetComponent<WallContact>();
 
         coolCnt = 0f;
-        coolTime = 5f;
-        trackingDistance = 6f;
-        moveSpeed = 0.03f;
+        coolTime = 1f;
+        trackingDistance = 10f;
+        moveSpeed = 0.01f;
         waitTime = 3f;
         colOffset[0] = new Vector2(Mathf.Abs(bc2[0].offset.x), bc2[0].offset.y);
         colOffset[1] = new Vector2(Mathf.Abs(bc2[1].offset.x), bc2[1].offset.y);

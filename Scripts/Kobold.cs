@@ -16,13 +16,23 @@ public class Kobold : Enemy
     {
         Init();
 
+        player = GameObject.Find("Player");
+        anim = this.GetComponent<Animator>();
+        sr = this.GetComponent<SpriteRenderer>();
+        bc2[0] = collisionObj[0].GetComponent<BoxCollider2D>();
+        eCollision = collisionObj[0].GetComponent<EnemyCollision>();
+        bc2[1] = collisionObj[1].GetComponent<BoxCollider2D>();
+        wallContact = collisionObj[1].GetComponent<WallContact>();
+
+        collisionObj[2].SetActive(false);
+
         coolCnt = 0f;
         coolTime = 2f;
         trackingDistance = 5f;
         moveSpeed = 0.03f;
         waitTime = 3f;
-        colOffset[0] = new Vector2(0.3f, -0.245f);
-        colOffset[1] = new Vector2(0.26f, -0.26f);
+        colOffset[0] = new Vector2(Mathf.Abs(bc2[0].offset.x), bc2[0].offset.y);
+        colOffset[1] = new Vector2(Mathf.Abs(bc2[1].offset.x), bc2[1].offset.y);
         isCoolDown = false;
         isWait = false;
         isAttack = false;
@@ -31,14 +41,6 @@ public class Kobold : Enemy
         dir = Direction.Left;
         beforeState = EnemyState.Wait;
         state = EnemyState.Wait;
-
-        player = GameObject.Find("Player");
-        anim = this.GetComponent<Animator>();
-        sr = this.GetComponent<SpriteRenderer>();
-        bc2[0] = collisionObj[0].GetComponent<BoxCollider2D>();
-        eCollision = collisionObj[0].GetComponent<EnemyCollision>();
-        bc2[1] = collisionObj[1].GetComponent<BoxCollider2D>();
-        wallContact = collisionObj[1].GetComponent<WallContact>();
 
         moveWaitTime = 1f;
         moveWaitCnt = 0f;
@@ -53,6 +55,8 @@ public class Kobold : Enemy
         CoolTime();
 
         TrackingJudgment();
+
+        if (!isAttack) collisionObj[2].SetActive(false);
 
         if (!isCoolDown && eCollision.isInvasion)
         {
@@ -100,6 +104,7 @@ public class Kobold : Enemy
                 if (!isAttack)
                 {
                     isAttack = true;
+                    collisionObj[2].SetActive(true);
                     StartCoroutine(Attack());
                 }
                 break;
