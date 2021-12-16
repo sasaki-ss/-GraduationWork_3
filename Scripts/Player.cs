@@ -42,7 +42,7 @@ public class Player : MonoBehaviour
         anim = GetComponent<Animator>();
 
         //ステータス
-        speed = 0.1f;
+        speed = 0.05f;
         jumpPower = 280.0f;
         jumpCount = 0;
 
