@@ -8,20 +8,25 @@ public class Player : MonoBehaviour
     Animator anim;
 
     //ステータス
+    private bool isActive;      //アクティブ状態
     private float speed;        //移動速度
     private float jumpPower;    //ジャンプの高さ
     private int jumpCount;      //ジャンプ回数のカウント
 
     //弾関連
     private GameObject MagicArray;  //魔法陣
-    private GameObject shot_0;      //弾
-    private int shot_speed;         //弾の速度
+    private GameObject[] ShotObject;//弾
+    private int shotSelect;         //現在選択されてるショット
     private int cooltime;           //弾発射のクールタイム
-    
 
     //定数
-    private const int MaxJumpCount = 2; //最大ジャンプ回数
-    private const int CoolTime0 = 5;    //shot_0のクールタイム
+    private const int MaxJumpCount = 2;         //最大ジャンプ回数
+
+    //弾関連の定数
+    private const int ShotType = 1;             //ショットの種類
+    private readonly int[] CoolTime = { 5 };    //ショットのクールタイム配列
+    private readonly int[] ShotPower = { 5 };　 //ショットの攻撃力配列
+    private readonly int[] ShotSpeed = { 20 };  //弾の速度配列
 
     //フレームカウント
     private int count;
@@ -34,6 +39,10 @@ public class Player : MonoBehaviour
     GameObject _floorContact;
     FloorContact scr_FloorContact;
 
+    public int GetShotPower{
+        get { return ShotPower[shotSelect]; }
+    }
+
     void Start()
     {
         //プレイヤーのコンポーネント
@@ -42,14 +51,16 @@ public class Player : MonoBehaviour
         anim = GetComponent<Animator>();
 
         //ステータス
+        isActive = true;
         speed = 0.05f;
         jumpPower = 280.0f;
         jumpCount = 0;
 
         //弾関連
         MagicArray = transform.Find("PlayerShot/MagicArray").gameObject;
-        shot_0 = (GameObject)Resources.Load("shot_0");
-        shot_speed = 20;
+        ShotObject = new GameObject[ShotType];
+        ShotObject[0] = (GameObject)Resources.Load("shot_0");
+        shotSelect = 0;
         cooltime = 0;
 
         //フレームカウント
@@ -116,10 +127,10 @@ public class Player : MonoBehaviour
     {
         if (Input.GetMouseButton(0))        //左クリック
         {
-            if (CoolTime0 < cooltime)
+            if (CoolTime[shotSelect] < cooltime)
             {
                 //生成
-                GameObject shot = Instantiate(shot_0, MagicArray.transform.position, Quaternion.identity);
+                GameObject shot = Instantiate(ShotObject[shotSelect], MagicArray.transform.position, Quaternion.identity);
 
                 // クリックした座標の取得（スクリーン座標からワールド座標に変換）
                 Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -128,7 +139,7 @@ public class Player : MonoBehaviour
                 Vector3 shotForward = Vector3.Scale((mouseWorldPos - transform.position), new Vector3(1, 1, 0)).normalized;
 
                 // 弾に速度を与える
-                shot.GetComponent<Rigidbody2D>().velocity = shotForward * shot_speed;
+                shot.GetComponent<Rigidbody2D>().velocity = shotForward * ShotSpeed[shotSelect];
 
                 cooltime = 0;   //クールタイムリセット
             }
