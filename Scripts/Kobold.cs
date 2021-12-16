@@ -24,6 +24,8 @@ public class Kobold : Enemy
         bc2[1] = collisionObj[1].GetComponent<BoxCollider2D>();
         wallContact = collisionObj[1].GetComponent<WallContact>();
 
+        collisionObj[2].SetActive(false);
+
         coolCnt = 0f;
         coolTime = 2f;
         trackingDistance = 5f;
@@ -53,6 +55,8 @@ public class Kobold : Enemy
         CoolTime();
 
         TrackingJudgment();
+
+        if (!isAttack) collisionObj[2].SetActive(false);
 
         if (!isCoolDown && eCollision.isInvasion)
         {
@@ -100,6 +104,7 @@ public class Kobold : Enemy
                 if (!isAttack)
                 {
                     isAttack = true;
+                    collisionObj[2].SetActive(true);
                     StartCoroutine(Attack());
                 }
                 break;
