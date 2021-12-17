@@ -13,26 +13,18 @@ public class EventManager : MonoBehaviour
     private bool        isRunEvent;     //イベント実行フラグ
     private EventType   nowEventNum;    //現在のイベント番号
 
-    private GameObject  zombie;     //ゾンビオブジェクト
+    private GameObject  zombieObj;     //ゾンビオブジェクト
 
     //初期化処理
     private void Start()
     {
         isRunEvent = false;
-        zombie = (GameObject)Resources.Load("Zombie");
+        zombieObj = (GameObject)Resources.Load("Zombie");
     }
 
     private void Update()
     {
-        if (isRunEvent)
-        {
-            switch (nowEventNum)
-            {
-                case EventType.Zombie:
 
-                    break;
-            }
-        }
     }
 
     public void StartRunEvent(EventType _eventType)
@@ -42,6 +34,30 @@ public class EventManager : MonoBehaviour
         isRunEvent = true;
         nowEventNum = _eventType;
 
-        Debug.Log("イベント開始");
+        switch (nowEventNum)
+        {
+            case EventType.Zombie:
+                StartCoroutine(ZombieEvent());
+                break;
+        }
+    }
+
+    private IEnumerator ZombieEvent()
+    {
+        GameObject player = GameObject.Find("Player");
+        Vector3 playerPos = player.transform.position;
+
+        for(int i = 0; i < 10; i++)
+        {
+            yield return new WaitForSeconds(1.0f);
+
+            GameObject zombieL = Instantiate(zombieObj,
+                new Vector3(playerPos.x - 15.0f, 20.0f, 0f),
+                Quaternion.identity);
+
+            GameObject zombieR = Instantiate(zombieObj,
+                new Vector3(playerPos.x + 15.0f, 20.0f, 0f),
+                Quaternion.identity);
+        }
     }
 }
