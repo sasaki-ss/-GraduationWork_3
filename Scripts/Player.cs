@@ -9,9 +9,16 @@ public class Player : MonoBehaviour
 
     //ステータス
     private bool isActive;      //アクティブ状態
+    private int hp;             //体力
     private float speed;        //移動速度
     private float jumpPower;    //ジャンプの高さ
     private int jumpCount;      //ジャンプ回数のカウント
+
+    //ヒット関連
+    private bool hitFlg;        //敵の攻撃に当たったフラグ
+    private int damage;         //敵からのダメージ (攻撃力)
+    private int hitCount;       //無敵時間用カウント
+    private const int INVINCIBLE = 60;  //無敵時間
 
     //弾関連
     private GameObject MagicArray;  //魔法陣
@@ -42,8 +49,14 @@ public class Player : MonoBehaviour
     GameObject _floorContact;
     FloorContact scr_FloorContact;
 
-    public int GetShotPower{
-        get { return ShotPower[shotSelect]; }
+    public bool SetHitFlg
+    {
+        set { hitFlg = value; }
+    }
+
+    public int SetDamage
+    {
+        set { damage = value; }
     }
 
     void Start()
@@ -58,6 +71,10 @@ public class Player : MonoBehaviour
         speed = 0.05f;
         jumpPower = 280.0f;
         jumpCount = 0;
+
+        hitFlg = false;
+        damage = 0;
+        hitCount = INVINCIBLE;
 
         //弾関連
         MagicArray = transform.Find("PlayerShot/MagicArray").gameObject;
@@ -89,11 +106,15 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Walk();
-        Jump();
-        Shot();
-        count++;
-        cooltime++;
+        if (isActive)
+        {   //アクティブ状態の時
+            Walk();             //歩く
+            Jump();             //ジャンプ
+            Shot();             //ショット
+            Count();            //カウント
+            Damage();           //ダメージ
+        }
+
     }
 
     void Walk()
@@ -155,6 +176,16 @@ public class Player : MonoBehaviour
         if (Input.GetMouseButtonUp(0)) clickFlg = false;
     }
 
+    void Count()
+    {   //カウント系関数
+        count++;
+        cooltime++;
+        hitCount--;
+        if (60 < count) count = 60;
+        if (60 < cooltime) cooltime = 60;
+        if (hitCount < -1) hitCount = -1;
+    }
+
     void Shot_0()
     {   //通常のショット
 
@@ -169,6 +200,9 @@ public class Player : MonoBehaviour
 
         // 弾に速度を与える
         shot.GetComponent<Rigidbody2D>().velocity = shotForward * ShotSpeed[shotSelect];
+
+        // 弾の攻撃力決定
+        shot.GetComponent<Bullet>().power = ShotPower[shotSelect];
     }
 
     void Shot_1()
@@ -176,4 +210,20 @@ public class Player : MonoBehaviour
 
         Shot_0();
     }
+
+    void Damage()
+    {
+        if (hitFlg && hitCount < 0)
+        {   //敵の攻撃が当たった時 ヒットカウントが60以上の時
+            
+            hp -= damage;            //ダメージ
+            hitFlg = false;          //フラグリセット
+            hitCount = INVINCIBLE;   //無敵時間
+        }
+        else
+        {
+            damage = 0;
+        }
+    }
+
 }
