@@ -68,6 +68,7 @@ public class Player : MonoBehaviour
 
         //ステータス
         isActive = true;
+        hp = 225;
         speed = 0.05f;
         jumpPower = 280.0f;
         jumpCount = 0;
@@ -224,6 +225,8 @@ public class Player : MonoBehaviour
         {
             damage = 0;
         }
+
+        if (hp <= 0) isActive = false;
     }
 
 }
