@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Zombie : Enemy
 {
+
     private void Start()
     {
         Init();
@@ -60,7 +61,7 @@ public class Zombie : Enemy
                 }
                 break;
             case EnemyState.Move:
-
+                Move();
                 break;
             case EnemyState.Attack:
                 if (!isAttack)
@@ -71,6 +72,28 @@ public class Zombie : Enemy
                 break;
             case EnemyState.Tracking:
                 Tracking();
+                break;
+        }
+    }
+
+    private void Move()
+    {
+        switch (eMovePattern)
+        {
+            case EnemyMovePattern.Normal:
+                break;
+            case EnemyMovePattern.Event:
+                if(this.transform.position.x > player.transform.position.x)
+                {
+                    this.transform.position -= new Vector3(moveSpeed, 0f, 0f);
+                }
+
+                if(this.transform.position.x < player.transform.position.x)
+                {
+                    this.transform.position += new Vector3(moveSpeed, 0f, 0f);
+                    sr.flipX = true;
+                }
+
                 break;
         }
     }

@@ -156,7 +156,7 @@ GameObject:
   - component: {fileID: 3606400003501967357}
   m_Layer: 0
   m_Name: Wizard
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -307,6 +307,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   state: 0
+  eMovePattern: 0
   collisionObj:
   - {fileID: 3606400003417732929}
   - {fileID: 3606400003358380287}

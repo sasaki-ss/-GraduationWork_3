@@ -10,6 +10,13 @@ public enum EnemyState
     Tracking
 }
 
+//敵の移動パターン
+public enum EnemyMovePattern
+{
+    Normal,
+    Event
+}
+
 public class Enemy : MonoBehaviour
 {
     public enum Direction
@@ -19,8 +26,8 @@ public class Enemy : MonoBehaviour
     }
 
     protected int               hp;                 //体力
-    protected float             atk;                //攻撃力
-    protected float             def;                //防御力
+    protected int               atk;                //攻撃力
+    protected int               def;                //防御力
 
     protected float             trackingDistance;   //追跡距離
     protected float             moveSpeed;          //移動速度
@@ -40,6 +47,9 @@ public class Enemy : MonoBehaviour
     protected EnemyState        beforeState;        //一つ前の状態
     [SerializeField]
     protected EnemyState        state;              //状態
+    [SerializeField]
+    protected EnemyMovePattern  eMovePattern = 
+        EnemyMovePattern.Normal;                    //敵の移動パターン
 
     [SerializeField]
     protected GameObject[]      collisionObj;       //当たり判定オブジェクト
@@ -214,6 +224,10 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    public void SetEnemyMovePattern(EnemyMovePattern _eMovePattern)
+    {
+        eMovePattern = _eMovePattern;
+    }
 
 
     private void OnTriggerEnter2D(Collider2D other)

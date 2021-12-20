@@ -58,6 +58,9 @@ public class EventManager : MonoBehaviour
             GameObject zombieR = Instantiate(zombieObj,
                 new Vector3(playerPos.x + 15.0f, 20.0f, 0f),
                 Quaternion.identity);
+
+            zombieL.GetComponent<Zombie>().SetEnemyMovePattern(EnemyMovePattern.Event);
+            zombieR.GetComponent<Zombie>().SetEnemyMovePattern(EnemyMovePattern.Event);
         }
     }
 }
