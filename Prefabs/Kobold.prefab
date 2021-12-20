@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 237102129}
   - component: {fileID: 237102130}
+  - component: {fileID: 332429491394436031}
   m_Layer: 0
   m_Name: HitCollision
   m_TagString: Untagged
@@ -57,6 +58,18 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.09220113, y: 0.38074267}
   m_EdgeRadius: 0
+--- !u!114 &332429491394436031
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 237102128}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e45fcb596e72f094498bb6aeab41d642, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3039820320283934646
 GameObject:
   m_ObjectHideFlags: 0
@@ -102,7 +115,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.30603468, y: -0.24607646}
+  m_Offset: {x: -0.2811351, y: -0.24607646}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -113,7 +126,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.6495931, y: 0.7591331}
+  m_Size: {x: 0.599794, y: 0.7591331}
   m_EdgeRadius: 0
 --- !u!114 &3263420552472438106
 MonoBehaviour:
