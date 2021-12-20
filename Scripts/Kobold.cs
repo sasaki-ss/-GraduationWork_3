@@ -17,6 +17,7 @@ public class Kobold : Enemy
         Init();
 
         atk = 50;
+        hp = 100;
 
         player = GameObject.Find("Player");
         anim = this.GetComponent<Animator>();

@@ -187,6 +187,7 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    //反転処理
     protected void Inversion(Direction _dir)
     {
         //反転で指定した方向が現在の方向と同じ場合処理を行わない
@@ -241,9 +242,15 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    //ダメージ処理
     private void Damage(int _bulletPow)
     {
         hp -= (_bulletPow - def);
+
+        if(hp <= 0)
+        {
+            Destroy(this.gameObject);
+        }
     }
 
     public void SetEnemyMovePattern(EnemyMovePattern _eMovePattern)
@@ -256,8 +263,7 @@ public class Enemy : MonoBehaviour
         return atk;
     }
 
-
-    private void OnTriggerEnter2D(Collider2D other)
+    private void OnCollisionEnter2D(Collision2D other)
     {
         if (other.gameObject.tag == "Bullet")
         {
