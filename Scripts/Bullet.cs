@@ -16,14 +16,14 @@ public class Bullet : MonoBehaviour
     void Update()
     {
         if (!GetComponent<Renderer>().isVisible)
-        {
+        {   //カメラ外に出た場合削除
             Destroy(this.gameObject);
         }
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.tag != "Untagged")
-        {
+        {   //タグ未設定のオブジェクトには当たっても削除しない
             Destroy(gameObject);
         }
     }
