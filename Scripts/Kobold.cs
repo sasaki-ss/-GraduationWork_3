@@ -16,6 +16,8 @@ public class Kobold : Enemy
     {
         Init();
 
+        atk = 50;
+
         player = GameObject.Find("Player");
         anim = this.GetComponent<Animator>();
         sr = this.GetComponent<SpriteRenderer>();
@@ -85,15 +87,9 @@ public class Kobold : Enemy
                 {
                     int rand = (int)Random.Range(0, 2f);
 
-                    if (rand == (int)Direction.Left)
-                    {
-                        dir = Direction.Left;
-                    }
+                    rand = 1;
 
-                    if (rand == (int)Direction.Right)
-                    {
-                        dir = Direction.Right;
-                    }
+                    Inversion((Direction)rand);
 
                     isMove = true;
                 }
@@ -112,15 +108,37 @@ public class Kobold : Enemy
                 Tracking();
                 break;
         }
+
+        
     }
 
     private void Move()
     {
+        //移動待機フラグがオフの場合
         if (!isMoveWait)
         {
-            anim.SetBool("isMove", true);
+            //壁がない場合
+            if (!wallContact.getContact)
+            {
+                anim.SetBool("isMove", true);
 
-            MoveProc();
+                //左方向への移動
+                if(dir == Direction.Left)
+                {
+                    this.transform.position -= new Vector3(moveSpeed, 0f, 0f);
+                }
+                
+                //右方向への移動
+                if(dir == Direction.Right)
+                {
+                    this.transform.position += new Vector3(moveSpeed, 0f, 0f);
+                }
+            }
+            //壁があった場合
+            else
+            {
+                anim.SetBool("isMove", false);
+            }
 
             //移動量を加算
             nowMoveAmount += moveSpeed;
@@ -145,11 +163,11 @@ public class Kobold : Enemy
         {
             if (dir == Direction.Left)
             {
-                dir = Direction.Right;
+                Inversion(Direction.Right);
             }
             else if (dir == Direction.Right)
             {
-                dir = Direction.Left;
+                Inversion(Direction.Left);
             }
 
             nowMoveAmount = 0f;

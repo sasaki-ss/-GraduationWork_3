@@ -106,10 +106,10 @@ public class Enemy : MonoBehaviour
             }
 
             if (player.transform.position.x < this.transform.position.x - 0.02)
-                dir = Direction.Left;
+                Inversion(Direction.Left);
 
             if (player.transform.position.x > this.transform.position.x + 0.02)
-                dir = Direction.Right;
+                Inversion(Direction.Right);
         }
 
         if (dir == Direction.Left)
@@ -187,13 +187,32 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    protected void Inversion(Direction _dir)
+    {
+        //îΩì]Ç≈éwíËÇµÇΩï˚å¸Ç™åªç›ÇÃï˚å¸Ç∆ìØÇ∂èÍçáèàóùÇçsÇÌÇ»Ç¢
+        if (dir == _dir) return;
+
+        dir = _dir;
+        float scale = Mathf.Abs(this.transform.localScale.x);
+
+        //ç∂ï˚å¸ÇÃç€
+        if(dir == Direction.Left)
+        {
+            this.transform.localScale = new Vector3(scale, scale, 0f);
+        }
+
+        //âEï˚å¸ÇÃç€
+        if(dir == Direction.Right)
+        {
+            this.transform.localScale = new Vector3(-scale, scale, 0f);
+        }
+    }
+
     protected void MoveProc()
     {
         if (dir == Direction.Left)
         {
-            sr.flipX = false;
-            bc2[0].offset = new Vector2(-colOffset[0].x, colOffset[0].y);
-            bc2[1].offset = new Vector2(-colOffset[1].x, colOffset[1].y);
+            Inversion(Direction.Left);
 
             if (!wallContact.getContact)
             {
@@ -208,9 +227,7 @@ public class Enemy : MonoBehaviour
 
         if(dir == Direction.Right)
         {
-            sr.flipX = true;
-            bc2[0].offset = new Vector2(colOffset[0].x, colOffset[0].y);
-            bc2[1].offset = new Vector2(colOffset[1].x, colOffset[1].y);
+            Inversion(Direction.Right);
 
             if (!wallContact.getContact)
             {
@@ -224,9 +241,19 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    private void Damage(int _bulletPow)
+    {
+        hp -= (_bulletPow - def);
+    }
+
     public void SetEnemyMovePattern(EnemyMovePattern _eMovePattern)
     {
         eMovePattern = _eMovePattern;
+    }
+
+    public int GetAtk()
+    {
+        return atk;
     }
 
 
@@ -234,7 +261,7 @@ public class Enemy : MonoBehaviour
     {
         if (other.gameObject.tag == "Bullet")
         {
-            Debug.Log("ìñÇΩÇËÇ‹ÇµÇΩ");
+            Damage(other.gameObject.GetComponent<Bullet>().power);
         }
     }
 }
