@@ -7,10 +7,17 @@ public class FollowCamera : MonoBehaviour
     private GameObject Player;
     private float tempX;      //移動をスムーズに行うための座標格納
     private float moveVel;      //移動速度
+    private bool moveFlg;       //動くフラグ
+
+    public bool SetMoveFlg
+    {
+        set { moveFlg = value; }
+    }
     void Start()
     {
         Player = GameObject.Find("Player");
         moveVel = 0.15f;
+        moveFlg = true;
     }
 
     // Update is called once per frame
@@ -20,7 +27,10 @@ public class FollowCamera : MonoBehaviour
         //transform.position = new Vector3(Player.transform.position.x, transform.position.y, transform.position.z);
 
         //徐々にカメラ追従
-        tempX = Mathf.SmoothStep(transform.position.x, Player.transform.position.x,moveVel);
-        transform.position = new Vector3(tempX, transform.position.y, transform.position.z);
+        if (moveFlg)
+        {
+            tempX = Mathf.SmoothStep(transform.position.x, Player.transform.position.x, moveVel);
+            transform.position = new Vector3(tempX, transform.position.y, transform.position.z);
+        }
     }
 }
