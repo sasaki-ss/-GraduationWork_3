@@ -16,7 +16,7 @@ public class FloorContact : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "Floor")
+        if (collision.gameObject.tag == "Floor" || collision.gameObject.tag == "Enemy")
         {
             floorContact = true;
         }
