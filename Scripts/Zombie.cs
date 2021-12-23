@@ -7,37 +7,33 @@ public class Zombie : Enemy
 
     private void Start()
     {
-        Init();
-
         player = GameObject.Find("Player");
         anim = this.GetComponent<Animator>();
         sr = this.GetComponent<SpriteRenderer>();
-        bc2[0] = collisionObj[0].GetComponent<BoxCollider2D>();
         eCollision = collisionObj[0].GetComponent<EnemyCollision>();
-        bc2[1] = collisionObj[1].GetComponent<BoxCollider2D>();
         wallContact = collisionObj[1].GetComponent<WallContact>();
+
+        atk = 10;
+        hp = 30;
+        def = 5;
 
         coolCnt = 0f;
         coolTime = 1f;
         trackingDistance = 10f;
         moveSpeed = 0.01f;
-        waitTime = 3f;
-        colOffset[0] = new Vector2(Mathf.Abs(bc2[0].offset.x), bc2[0].offset.y);
-        colOffset[1] = new Vector2(Mathf.Abs(bc2[1].offset.x), bc2[1].offset.y);
+        waitTime = 5f;
         isCoolDown = false;
         isWait = false;
         isAttack = false;
         isTracking = false;
         dir = Direction.Left;
-        beforeState = EnemyState.Wait;
-        state = EnemyState.Wait;
     }
 
     private void Update()
     {
         CoolTime();
 
-        TrackingJudgment();
+        if (eMovePattern != EnemyMovePattern.Event) TrackingJudgment();
 
         if (!isCoolDown && eCollision.isInvasion)
         {
@@ -86,12 +82,13 @@ public class Zombie : Enemy
                 if(this.transform.position.x > player.transform.position.x)
                 {
                     this.transform.position -= new Vector3(moveSpeed, 0f, 0f);
+                    Inversion(Direction.Left);
                 }
 
                 if(this.transform.position.x < player.transform.position.x)
                 {
                     this.transform.position += new Vector3(moveSpeed, 0f, 0f);
-                    sr.flipX = true;
+                    Inversion(Direction.Right);
                 }
 
                 break;

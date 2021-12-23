@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 237360408527966991}
   m_Layer: 0
-  m_Name: Emeny
+  m_Name: Enemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

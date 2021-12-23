@@ -41,12 +41,13 @@ public class Enemy : MonoBehaviour
     protected bool              isAttack;           //攻撃フラグ
     protected bool              isTracking;         //追跡フラグ
 
-    protected Vector2[]         colOffset;          //当たり判定の偏り値
     protected Direction         dir;                //方向
 
-    protected EnemyState        beforeState;        //一つ前の状態
+    protected EnemyState        beforeState =
+        EnemyState.Wait;                            //一つ前の状態
     [SerializeField]
-    protected EnemyState        state;              //状態
+    protected EnemyState        state = 
+        EnemyState.Wait;                            //状態
     [SerializeField]
     protected EnemyMovePattern  eMovePattern = 
         EnemyMovePattern.Normal;                    //敵の移動パターン
@@ -55,17 +56,9 @@ public class Enemy : MonoBehaviour
     protected GameObject[]      collisionObj;       //当たり判定オブジェクト
     protected GameObject        player;             //プレイヤーオブジェクト
     protected Animator          anim;               //アニメーター
-    protected BoxCollider2D[]   bc2;                //ボックスコライダー2d
     protected SpriteRenderer    sr;                 //スプライトレンダラー
     protected EnemyCollision    eCollision;         //当たり判定用の処理
     protected WallContact       wallContact;        //壁判定用の処理
-
-    //初期化処理
-    protected void Init()
-    {
-        bc2 = new BoxCollider2D[2];
-        colOffset = new Vector2[2];
-    }
 
     //状態変化処理
     protected void StateChange(EnemyState _state)
@@ -258,6 +251,7 @@ public class Enemy : MonoBehaviour
     public void SetEnemyMovePattern(EnemyMovePattern _eMovePattern)
     {
         eMovePattern = _eMovePattern;
+        StateChange(EnemyState.Move);
     }
 
     public int GetAtk()
