@@ -33,10 +33,10 @@ public class Player : MonoBehaviour
     private const int MaxJumpCount = 2;            //最大ジャンプ回数
 
     //弾関連の定数
-    private const int ShotType = 2;                //ショットの種類
-    private readonly int[] CoolTime = { 5,15 };    //ショットのクールタイム配列
-    private readonly int[] ShotPower = { 5,25 };　 //ショットの攻撃力配列
-    private readonly int[] ShotSpeed = { 20,10 };  //弾の速度配列
+    private const int ShotType = 3;                //ショットの種類
+    private readonly int[] CoolTime = { 10,15,5 };   //ショットのクールタイム配列
+    private readonly int[] ShotPower = { 10,45,10 };　 //ショットの攻撃力配列
+    private readonly int[] ShotSpeed = { 20,10,20 };  //弾の速度配列
 
     //フレームカウント
     private int count;
@@ -82,6 +82,7 @@ public class Player : MonoBehaviour
         ShotObject = new GameObject[ShotType];
         ShotObject[0] = (GameObject)Resources.Load("shot_0");
         ShotObject[1] = (GameObject)Resources.Load("shot_0");
+        ShotObject[2] = (GameObject)Resources.Load("shot_0");
         shotSelect = 0;
         cooltime = 0;
 
@@ -156,18 +157,22 @@ public class Player : MonoBehaviour
     {
         if (Input.GetMouseButton(0))        //左クリック
         {
-            shotSelect = 1;
+            shotSelect = 2;
 
             if (CoolTime[shotSelect] < cooltime)
             {
                 switch (shotSelect)
                 {
                     case 0:
-                        Shot_0();
+                        if (!clickFlg) Shot_0();
+                        clickFlg = true;
                         break;
                     case 1:
                         if(!clickFlg) Shot_1();
                         clickFlg = true;
+                        break;
+                    case 2:
+                        Shot_2();
                         break;
                 }
 
@@ -188,7 +193,7 @@ public class Player : MonoBehaviour
     }
 
     void Shot_0()
-    {   //通常のショット
+    {   //初期ショット
 
         //生成
         GameObject shot = Instantiate(ShotObject[shotSelect], MagicArray.transform.position, Quaternion.identity);
@@ -208,6 +213,12 @@ public class Player : MonoBehaviour
 
     void Shot_1()
     {   //単発
+
+        Shot_0();
+    }
+
+    void Shot_2()
+    {   //連射
 
         Shot_0();
     }
