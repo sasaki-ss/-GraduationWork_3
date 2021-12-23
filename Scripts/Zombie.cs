@@ -13,6 +13,8 @@ public class Zombie : Enemy
         eCollision = collisionObj[0].GetComponent<EnemyCollision>();
         wallContact = collisionObj[1].GetComponent<WallContact>();
 
+        collisionObj[2].SetActive(false);
+
         atk = 10;
         hp = 30;
         def = 5;
@@ -20,7 +22,7 @@ public class Zombie : Enemy
         coolCnt = 0f;
         coolTime = 1f;
         trackingDistance = 10f;
-        moveSpeed = 0.01f;
+        moveSpeed = 0.02f;
         waitTime = 5f;
         isCoolDown = false;
         isWait = false;
@@ -34,6 +36,8 @@ public class Zombie : Enemy
         CoolTime();
 
         if (eMovePattern != EnemyMovePattern.Event) TrackingJudgment();
+
+        if (!isAttack) collisionObj[2].SetActive(false);
 
         if (!isCoolDown && eCollision.isInvasion)
         {
@@ -63,6 +67,7 @@ public class Zombie : Enemy
                 if (!isAttack)
                 {
                     isAttack = true;
+                    collisionObj[2].SetActive(true);
                     StartCoroutine(Attack());
                 }
                 break;

@@ -9,7 +9,6 @@ public enum EventType
 
 public class EventManager : MonoBehaviour
 {
-
     private bool        isRunEvent;     //イベント実行フラグ
     private EventType   nowEventNum;    //現在のイベント番号
 
@@ -24,7 +23,10 @@ public class EventManager : MonoBehaviour
 
     private void Update()
     {
+        if (isRunEvent)
+        {
 
+        }
     }
 
     public void StartRunEvent(EventType _eventType)
@@ -47,20 +49,31 @@ public class EventManager : MonoBehaviour
         GameObject player = GameObject.Find("Player");
         Vector3 playerPos = player.transform.position;
 
-        for(int i = 0; i < 10; i++)
+        for (int i = 0; i < 40; i++)
         {
-            yield return new WaitForSeconds(1.0f);
+            yield return new WaitForSeconds(1.2f);
 
-            GameObject zombieL = Instantiate(zombieObj,
-                new Vector3(playerPos.x - 15.0f, 20.0f, 0f),
-                Quaternion.identity);
+            if(i >= 0 && i < 15)
+            {
+                ZombieCreate(new Vector3(playerPos.x - 12.0f, 10.0f, 0f), Quaternion.identity);
+            }
 
-            GameObject zombieR = Instantiate(zombieObj,
-                new Vector3(playerPos.x + 15.0f, 20.0f, 0f),
-                Quaternion.identity);
+            if(i >= 15 && i < 30)
+            {
+                ZombieCreate(new Vector3(playerPos.x + 12.0f, 10.0f, 0f), Quaternion.identity);
+            }
 
-            zombieL.GetComponent<Zombie>().SetEnemyMovePattern(EnemyMovePattern.Event);
-            zombieR.GetComponent<Zombie>().SetEnemyMovePattern(EnemyMovePattern.Event);
+            if(i >= 30)
+            {
+                ZombieCreate(new Vector3(playerPos.x - 12.0f, 10.0f, 0f), Quaternion.identity);
+                ZombieCreate(new Vector3(playerPos.x + 12.0f, 10.0f, 0f), Quaternion.identity);
+            }
         }
+    }
+
+    private void ZombieCreate(Vector3 _pos, Quaternion _rot)
+    {
+        GameObject zombie = Instantiate(zombieObj, _pos, _rot);
+        zombie.GetComponent<Zombie>().SetEnemyMovePattern(EnemyMovePattern.Event);
     }
 }
