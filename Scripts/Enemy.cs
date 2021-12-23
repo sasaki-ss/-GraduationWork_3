@@ -243,9 +243,11 @@ public class Enemy : MonoBehaviour
     }
 
     //ダメージ処理
-    private void Damage(int _bulletPow)
+    public void Damage(int _bulletPow)
     {
         hp -= (_bulletPow - def);
+
+        Debug.Log("ダメージ!! now HP = " + hp);
 
         if(hp <= 0)
         {
@@ -261,13 +263,5 @@ public class Enemy : MonoBehaviour
     public int GetAtk()
     {
         return atk;
-    }
-
-    private void OnCollisionEnter2D(Collision2D other)
-    {
-        if (other.gameObject.tag == "Bullet")
-        {
-            Damage(other.gameObject.GetComponent<Bullet>().power);
-        }
     }
 }

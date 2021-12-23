@@ -14,6 +14,9 @@ public class CheckPoint : MonoBehaviour
             GameObject.Find("EventManager").GetComponent
                 <EventManager>().StartRunEvent(eventNum);
 
+            GameObject.Find("Main Camera").GetComponent<
+                FollowCamera>().SetMoveFlg = false;
+
             this.gameObject.SetActive(false);
         }
     }
