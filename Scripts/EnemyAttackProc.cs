@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EnemyAttackProc : MonoBehaviour
 {
-    GameObject parentObject;
+    GameObject parentObject;    //親オブジェクト
 
     private void Start()
     {
@@ -13,6 +13,7 @@ public class EnemyAttackProc : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
+        //プレイヤーと当たったとき、当たりフラグとダメージを受け渡す
         if(other.gameObject.tag == "Player")
         {
             Player player = GameObject.Find("Player").GetComponent<Player>();
