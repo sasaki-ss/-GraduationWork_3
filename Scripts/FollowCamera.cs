@@ -9,6 +9,11 @@ public class FollowCamera : MonoBehaviour
     private float moveVel;      //ˆÚ“®‘¬“x
     private bool moveFlg;       //“®‚­ƒtƒ‰ƒO
 
+public bool GetMoveFlg
+    {
+        get { return moveFlg; }
+    }
+
     public bool SetMoveFlg
     {
         set { moveFlg = value; }
