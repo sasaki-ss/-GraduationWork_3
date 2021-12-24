@@ -7,6 +7,13 @@ public class Player : MonoBehaviour
     Rigidbody2D rb;
     Animator anim;
 
+    //カメラ(移動制限用)
+    GameObject mainCam;
+    Camera camera;
+    FollowCamera followCam;
+    Vector3 topLeft;
+    Vector3 bottomRight;
+
     //ステータス
     private bool isActive;      //アクティブ状態
     private int hp;             //体力
@@ -66,6 +73,11 @@ public class Player : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
 
+        //カメラ
+        mainCam = GameObject.Find("Main Camera");
+        camera = mainCam.GetComponent<Camera>();
+        followCam = mainCam.GetComponent<FollowCamera>();
+
         //ステータス
         isActive = true;
         hp = 225;
@@ -121,6 +133,12 @@ public class Player : MonoBehaviour
 
     void Walk()
     {
+        topLeft = camera.ScreenToWorldPoint(Vector3.zero);  //左上の座標
+        topLeft.Scale(new Vector3(1f, -1f, 1f));
+
+        bottomRight = camera.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0.0f));    //右下の座標
+        bottomRight.Scale(new Vector3(1f, -1f, 1f));
+
         if (Input.GetKey(KeyCode.A) && !scr_WallContact[0].getContact)
         {   //左移動
             transform.position -= new Vector3(speed, 0, 0);
@@ -134,6 +152,11 @@ public class Player : MonoBehaviour
             anim.SetFloat("Speed", speed);
         }
         else anim.SetFloat("Speed", -1);
+
+        if (!followCam.GetMoveFlg)
+        {   //イベント中の移動制限
+            transform.position = new Vector2(Mathf.Clamp(transform.position.x, topLeft.x, bottomRight.x), transform.position.y);
+        }
     }
 
     void Jump()
