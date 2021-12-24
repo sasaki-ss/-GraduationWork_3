@@ -79,6 +79,8 @@ public class Zombie : Enemy
 
     private void Move()
     {
+        anim.SetBool("isMove", true);
+
         switch (eMovePattern)
         {
             case EnemyMovePattern.Normal:
