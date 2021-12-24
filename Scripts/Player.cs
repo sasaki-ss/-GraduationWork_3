@@ -32,6 +32,8 @@ public class Player : MonoBehaviour
     private GameObject[] ShotObject;//弾
     private int shotSelect;         //現在選択されてるショット
     private int cooltime;           //弾発射のクールタイム
+    private int bulletCnt;          //弾発射のカウント
+    private bool bulletCntFlg;       //カウント開始フラグ
 
     //マウスクリック
     private bool clickFlg;          //単発ショット用
@@ -40,10 +42,10 @@ public class Player : MonoBehaviour
     private const int MaxJumpCount = 2;            //最大ジャンプ回数
 
     //弾関連の定数
-    private const int ShotType = 3;                //ショットの種類
-    private readonly int[] CoolTime = { 10,15,5 };   //ショットのクールタイム配列
-    private readonly int[] ShotPower = { 10,45,10 };　 //ショットの攻撃力配列
-    private readonly int[] ShotSpeed = { 20,10,20 };  //弾の速度配列
+    private const int ShotType = 4;                //ショットの種類
+    private readonly int[] CoolTime = { 10,15,5,1 };   //ショットのクールタイム配列
+    private readonly int[] ShotPower = { 10,45,10,20 };　 //ショットの攻撃力配列
+    private readonly int[] ShotSpeed = { 20,10,20,15 };  //弾の速度配列
 
     //フレームカウント
     private int count;
@@ -95,8 +97,11 @@ public class Player : MonoBehaviour
         ShotObject[0] = (GameObject)Resources.Load("shot_0");
         ShotObject[1] = (GameObject)Resources.Load("shot_0");
         ShotObject[2] = (GameObject)Resources.Load("shot_0");
+        ShotObject[3] = (GameObject)Resources.Load("shot_0");
         shotSelect = 0;
         cooltime = 0;
+        bulletCnt = 0;
+        bulletCntFlg = false;
 
         //マウスクリック
         clickFlg = false;
@@ -180,7 +185,7 @@ public class Player : MonoBehaviour
     {
         if (Input.GetMouseButton(0))        //左クリック
         {
-            shotSelect = 2;
+            shotSelect = 3;
 
             if (CoolTime[shotSelect] < cooltime)
             {
@@ -197,12 +202,19 @@ public class Player : MonoBehaviour
                     case 2:
                         Shot_2();
                         break;
+                    case 3:
+                        if (!clickFlg) Shot_3();
+                        break;
                 }
 
                 cooltime = 0;   //クールタイムリセット
             }
         }
-        if (Input.GetMouseButtonUp(0)) clickFlg = false;
+        if (Input.GetMouseButtonUp(0))
+        {
+            clickFlg = false;
+            bulletCnt = 0;
+        }
     }
 
     void Count()
@@ -244,6 +256,14 @@ public class Player : MonoBehaviour
     {   //連射
 
         Shot_0();
+    }
+
+    void Shot_3()
+    {   //3点バースト
+
+        Shot_0();
+        bulletCnt++;
+        if (2 < bulletCnt) clickFlg = true;
     }
 
     void Damage()
