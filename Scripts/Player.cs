@@ -33,7 +33,8 @@ public class Player : MonoBehaviour
     private int shotSelect;         //現在選択されてるショット
     private int cooltime;           //弾発射のクールタイム
     private int bulletCnt;          //弾発射のカウント
-    private bool bulletCntFlg;       //カウント開始フラグ
+    private bool bulletCntFlg;      //カウント開始フラグ
+    private int bulletNumCnt;       //弾の発射数カウント
 
     //マウスクリック
     private bool clickFlg;          //単発ショット用
@@ -102,6 +103,7 @@ public class Player : MonoBehaviour
         cooltime = 0;
         bulletCnt = 0;
         bulletCntFlg = false;
+        bulletNumCnt = 0;
 
         //マウスクリック
         clickFlg = false;
@@ -203,8 +205,9 @@ public class Player : MonoBehaviour
                         Shot_2();
                         break;
                     case 3:
-                        if (!clickFlg) Shot_3();
-                        break;
+                            if(!clickFlg) Shot_3();
+                            if(!bulletCntFlg) bulletCntFlg = true;
+                            break;
                 }
 
                 cooltime = 0;   //クールタイムリセット
@@ -213,7 +216,6 @@ public class Player : MonoBehaviour
         if (Input.GetMouseButtonUp(0))
         {
             clickFlg = false;
-            bulletCnt = 0;
         }
     }
 
@@ -225,6 +227,8 @@ public class Player : MonoBehaviour
         if (60 < count) count = 60;
         if (60 < cooltime) cooltime = 60;
         if (hitCount < -1) hitCount = -1;
+        if (bulletCntFlg) bulletCnt++;
+        if (!bulletCntFlg) bulletCnt = 0;
     }
 
     void Shot_0()
@@ -260,10 +264,21 @@ public class Player : MonoBehaviour
 
     void Shot_3()
     {   //3点バースト
+        int cooltime = 25;      //クールタイム
+        int shotBulletNum = 3;  //ショット数
 
-        Shot_0();
-        bulletCnt++;
-        if (2 < bulletCnt) clickFlg = true;
+        if (bulletCnt % 1 == 0 && bulletCnt < cooltime && bulletNumCnt < shotBulletNum)
+        {   //発射レート //クールタイム //発射数
+            Shot_0();
+            bulletNumCnt++;
+        }
+        if (shotBulletNum < bulletNumCnt) clickFlg = true;
+        if (cooltime < bulletCnt)
+        {
+            bulletCntFlg = false;
+            bulletNumCnt = 0;
+            bulletCnt = 0;
+        }
     }
 
     void Damage()
