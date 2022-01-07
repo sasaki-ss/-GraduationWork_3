@@ -59,6 +59,16 @@ public class Player : MonoBehaviour
     GameObject _floorContact;
     FloorContact scr_FloorContact;
 
+    public int getHP
+    {
+        get { return hp; }
+    }
+
+    public int getShotSelect
+    {
+        get { return shotSelect; }
+    }
+
     public bool SetHitFlg
     {
         set { hitFlg = value; }
