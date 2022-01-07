@@ -32,10 +32,17 @@ public bool GetMoveFlg
         //transform.position = new Vector3(Player.transform.position.x, transform.position.y, transform.position.z);
 
         //™X‚ÉƒJƒƒ‰’Ç]
-        if (moveFlg)
+        if (moveFlg && Player.transform.position.y < 2.5)
         {
             tempX = Mathf.SmoothStep(transform.position.x, Player.transform.position.x, moveVel);
             transform.position = new Vector3(tempX, transform.position.y, transform.position.z);
         }
+
+        else if (moveFlg && 2.5 < Player.transform.position.y)
+        {
+            tempX = Mathf.SmoothStep(transform.position.x, Player.transform.position.x, moveVel);
+            transform.position = new Vector3(tempX, Player.transform.position.y - 2.5f, transform.position.z);
+        }
+
     }
 }
