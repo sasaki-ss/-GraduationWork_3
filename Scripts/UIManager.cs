@@ -61,18 +61,43 @@ public class UIManager : MonoBehaviour
 
     GameObject _player;
     Slider _hp;
+    Image _shotSelect;
+    private int shotSelect;
+
+    public Sprite img0;
+    public Sprite img1;
+    public Sprite img2;
+    public Sprite img3;
 
     void InGameInit()
     {
         _player = GameObject.Find("Player");
         _hp = GameObject.Find("HP").GetComponent<Slider>();
+        _shotSelect = GameObject.Find("ShotSelect").GetComponent<Image>();
         _hp.maxValue = _player.GetComponent<Player>().getHP;
         _hp.value = _player.GetComponent<Player>().getHP;
+
     }
 
     void InGameUpdate()
     {
         _hp.value = _player.GetComponent<Player>().getHP;
+
+        switch (_player.GetComponent<Player>().getShotSelect)
+        {
+            case 0:
+                _shotSelect.sprite = img0;
+                break;
+            case 1:
+                _shotSelect.sprite = img1;
+                break;
+            case 2:
+                _shotSelect.sprite = img2;
+                break;
+            case 3:
+                _shotSelect.sprite = img3;
+                break;
+        }
     }
 
     #endregion

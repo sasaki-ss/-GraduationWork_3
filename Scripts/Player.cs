@@ -79,6 +79,10 @@ public class Player : MonoBehaviour
         set { damage = value; }
     }
 
+    public int setShotSelect
+    {
+        set { shotSelect = value; }
+    }
     void Start()
     {
         //プレイヤーのコンポーネント
@@ -197,7 +201,6 @@ public class Player : MonoBehaviour
     {
         if (Input.GetMouseButton(0))        //左クリック
         {
-            shotSelect = 3;
 
             if (CoolTime[shotSelect] < cooltime)
             {
