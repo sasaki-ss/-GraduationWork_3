@@ -148,7 +148,9 @@ public class Player : MonoBehaviour
             Shot();             //ショット
             Count();            //カウント
             Damage();           //ダメージ
+            if (transform.position.y < -7) isActive = false;
         }
+        else Debug.Log("aaa");
 
     }
 
