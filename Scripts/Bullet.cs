@@ -17,7 +17,7 @@ public class Bullet : MonoBehaviour
     {
         if (!GetComponent<Renderer>().isVisible)
         {   //ƒJƒƒ‰ŠO‚Éo‚½ê‡íœ
-            Destroy(this.gameObject);
+            Destroy(gameObject);
         }
     }
     private void OnTriggerEnter2D(Collider2D collision)
