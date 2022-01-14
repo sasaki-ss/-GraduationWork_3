@@ -10,7 +10,7 @@ public class UIManager : MonoBehaviour
     void Start()
     {
         if (SceneManager.GetActiveScene().name == "Title") TitleInit();
-        else if (SceneManager.GetActiveScene().name == "Menu") { }
+        else if (SceneManager.GetActiveScene().name == "Menu") MenuInit();
         else InGameInit();
 
     }
@@ -19,7 +19,7 @@ public class UIManager : MonoBehaviour
     void Update()
     {
         if (SceneManager.GetActiveScene().name == "Title") TitleUpdate();
-        else if (SceneManager.GetActiveScene().name == "Menu") { }
+        else if (SceneManager.GetActiveScene().name == "Menu") MenuUpdate();
         else InGameUpdate();
     }
 
@@ -56,6 +56,27 @@ public class UIManager : MonoBehaviour
         {
             if(Application.isEditor) UnityEditor.EditorApplication.isPlaying = false;
             else Application.Quit();
+        });
+    }
+
+    #endregion
+
+    #region Menu
+
+    Button _back;
+    AsyncOperation _titleAsync;
+    void MenuInit()
+    {
+        _back = GameObject.Find("BackButton").GetComponent<Button>();
+        _titleAsync = SceneManager.LoadSceneAsync("Title");
+        _titleAsync.allowSceneActivation = false;
+    }
+
+    void MenuUpdate()
+    {
+        _back.onClick.AddListener(() =>
+        {
+            _titleAsync.allowSceneActivation = true;
         });
     }
 

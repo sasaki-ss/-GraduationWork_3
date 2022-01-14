@@ -505,6 +505,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 345e534ab9e66e448bf54b6168dab583, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  img0: {fileID: 0}
+  img1: {fileID: 0}
+  img2: {fileID: 0}
+  img3: {fileID: 0}
 --- !u!1 &882102690
 GameObject:
   m_ObjectHideFlags: 0
@@ -654,7 +658,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u30E1\u30CB\u30E5\u30FC"
+  m_Text: "\u8AAC\u660E"
 --- !u!222 &959859448
 CanvasRenderer:
   m_ObjectHideFlags: 0
