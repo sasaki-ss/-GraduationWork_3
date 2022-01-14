@@ -28,19 +28,23 @@ public class UIManager : MonoBehaviour
     Button _start;
     Button _menu;
     Button _exit;
+    AsyncOperation _stage01;
 
     void TitleInit()
     {
         _start = GameObject.Find("StartButton").GetComponent<Button>();
         _menu = GameObject.Find("MenuButton").GetComponent<Button>();
         _exit = GameObject.Find("ExitButton").GetComponent<Button>();
+        _stage01 = SceneManager.LoadSceneAsync("Stage01");
+        _stage01.allowSceneActivation = false;
     }
 
     void TitleUpdate()
     {
+        
         _start.onClick.AddListener(() => 
         {
-            SceneManager.LoadScene("Stage01");
+            _stage01.allowSceneActivation = true;
         });
 
         _menu.onClick.AddListener(() =>
