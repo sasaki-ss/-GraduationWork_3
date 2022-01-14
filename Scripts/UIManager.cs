@@ -32,6 +32,15 @@ public class UIManager : MonoBehaviour
     Button _start;
     Button _menu;
     Button _exit;
+    Button _back;
+
+    //パネル
+    RectTransform _titlePanel;
+    RectTransform _menuPanel;
+
+    float tempX;
+    bool isMenu;
+    bool isBack;
 
     //シーンの事前読み込み用
     AsyncOperation _stage01;
@@ -41,6 +50,13 @@ public class UIManager : MonoBehaviour
         _start = GameObject.Find("StartButton").GetComponent<Button>();
         _menu = GameObject.Find("MenuButton").GetComponent<Button>();
         _exit = GameObject.Find("ExitButton").GetComponent<Button>();
+        _back = GameObject.Find("BackButton").GetComponent<Button>();
+
+        _titlePanel = GameObject.Find("TitlePanel").GetComponent<RectTransform>();
+        _menuPanel = GameObject.Find("MenuPanel").GetComponent<RectTransform>();
+
+        tempX = 0;
+        isMenu = false;
 
         //シーンの事前読み込み
         _stage01 = SceneManager.LoadSceneAsync("Stage01");
@@ -58,7 +74,7 @@ public class UIManager : MonoBehaviour
 
         _menu.onClick.AddListener(() =>
         {
-            SceneManager.LoadScene("Menu");
+            isMenu = true;
         });
 
         _exit.onClick.AddListener(() =>
@@ -67,6 +83,16 @@ public class UIManager : MonoBehaviour
             if(Application.isEditor) UnityEditor.EditorApplication.isPlaying = false;
             else Application.Quit();
         });
+
+        _back.onClick.AddListener(() =>
+        {
+            isMenu = false;
+        });
+
+        if (isMenu) tempX = Mathf.SmoothStep(_titlePanel.localPosition.x, -1920, Time.deltaTime * 20);
+        else tempX = Mathf.SmoothStep(_titlePanel.localPosition.x, 0, Time.deltaTime * 20);
+        _titlePanel.localPosition = new Vector3(tempX, 0, 0);
+        _menuPanel.localPosition = new Vector3(_titlePanel.localPosition.x + 1920, 0, 0);
     }
 
     #endregion
@@ -74,21 +100,14 @@ public class UIManager : MonoBehaviour
     #region Menu
     //メニューシーン関連の処理
 
-    Button _back;
-    AsyncOperation _titleAsync;
     void MenuInit()
     {
-        _back = GameObject.Find("BackButton").GetComponent<Button>();
-        _titleAsync = SceneManager.LoadSceneAsync("Title");
-        _titleAsync.allowSceneActivation = false;
+
     }
 
     void MenuUpdate()
     {
-        _back.onClick.AddListener(() =>
-        {
-            _titleAsync.allowSceneActivation = true;
-        });
+        
     }
 
     #endregion
