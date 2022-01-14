@@ -14,10 +14,14 @@ public class Item : MonoBehaviour
     public Sprite img3;
     void Start()
     {
+
+        //ランダムで生成時のショットアイテムの種類を決定
         UnityEngine.Random.InitState(System.DateTime.Now.Millisecond);
+
+        //0は初期装備のため除外 1～3を返す
         itemNum = UnityEngine.Random.Range(1, 4);
 
-
+        //画像変更
         switch (itemNum)
         {
             case 0:
@@ -45,6 +49,7 @@ public class Item : MonoBehaviour
     {
         if (collision.tag == "Player")
         {
+            //プレイヤーのショット選択番号をこのアイテムの番号に更新
             collision.GetComponent<Player>().setShotSelect = itemNum;
             Destroy(gameObject);
         }

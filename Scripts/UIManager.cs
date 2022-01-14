@@ -9,6 +9,7 @@ public class UIManager : MonoBehaviour
 
     void Start()
     {
+        //各シーンの初期化読み込み
         if (SceneManager.GetActiveScene().name == "Title") TitleInit();
         else if (SceneManager.GetActiveScene().name == "Menu") MenuInit();
         else InGameInit();
@@ -18,16 +19,21 @@ public class UIManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //各シーンの更新読み込み
         if (SceneManager.GetActiveScene().name == "Title") TitleUpdate();
         else if (SceneManager.GetActiveScene().name == "Menu") MenuUpdate();
         else InGameUpdate();
     }
 
     #region Title
+    //タイトルシーン関連の処理
 
+    //ボタン
     Button _start;
     Button _menu;
     Button _exit;
+
+    //シーンの事前読み込み用
     AsyncOperation _stage01;
 
     void TitleInit()
@@ -35,6 +41,8 @@ public class UIManager : MonoBehaviour
         _start = GameObject.Find("StartButton").GetComponent<Button>();
         _menu = GameObject.Find("MenuButton").GetComponent<Button>();
         _exit = GameObject.Find("ExitButton").GetComponent<Button>();
+
+        //シーンの事前読み込み
         _stage01 = SceneManager.LoadSceneAsync("Stage01");
         _stage01.allowSceneActivation = false;
     }
@@ -44,6 +52,7 @@ public class UIManager : MonoBehaviour
         
         _start.onClick.AddListener(() => 
         {
+            //InGame開始
             _stage01.allowSceneActivation = true;
         });
 
@@ -54,6 +63,7 @@ public class UIManager : MonoBehaviour
 
         _exit.onClick.AddListener(() =>
         {
+            //終了処理
             if(Application.isEditor) UnityEditor.EditorApplication.isPlaying = false;
             else Application.Quit();
         });
@@ -62,6 +72,7 @@ public class UIManager : MonoBehaviour
     #endregion
 
     #region Menu
+    //メニューシーン関連の処理
 
     Button _back;
     AsyncOperation _titleAsync;
@@ -83,11 +94,11 @@ public class UIManager : MonoBehaviour
     #endregion
 
     #region InGame
+    //ゲームシーン関連の処理
 
     GameObject _player;
     Slider _hp;
     Image _shotSelect;
-    private int shotSelect;
 
     public Sprite img0;
     public Sprite img1;
@@ -106,8 +117,10 @@ public class UIManager : MonoBehaviour
 
     void InGameUpdate()
     {
+        //HPゲージの更新
         _hp.value = _player.GetComponent<Player>().getHP;
 
+        //現在選択されてるショットの種類に応じた画像表示
         switch (_player.GetComponent<Player>().getShotSelect)
         {
             case 0:
