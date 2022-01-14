@@ -40,7 +40,6 @@ public class UIManager : MonoBehaviour
 
     float tempX;
     bool isMenu;
-    bool isBack;
 
     //シーンの事前読み込み用
     AsyncOperation _stage01;
@@ -89,6 +88,7 @@ public class UIManager : MonoBehaviour
             isMenu = false;
         });
 
+        //メニューパネルの移動
         if (isMenu) tempX = Mathf.SmoothStep(_titlePanel.localPosition.x, -1920, Time.deltaTime * 20);
         else tempX = Mathf.SmoothStep(_titlePanel.localPosition.x, 0, Time.deltaTime * 20);
         _titlePanel.localPosition = new Vector3(tempX, 0, 0);
