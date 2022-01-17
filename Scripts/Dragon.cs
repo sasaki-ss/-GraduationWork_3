@@ -8,22 +8,28 @@ public class Dragon : Enemy
 {
     private GameObject  fireBall;
 
-    private float       disTwoPoints;
-    private float       nextAttackTime;
-    private float       attackTimeCnt;
+    [SerializeField]
+    private GameObject[]    hitCollisions;
+
+    private FloorChecker    fc;
+    private Rigidbody2D     rb2;
+
+    private float           disTwoPoints;
+    private float           nextAttackTime;
+    private float           attackTimeCnt;
 
     [SerializeField]
-    private int         rashMovePhase;
-    private float       rashMoveSpeed;
+    private int             rashMovePhase;
+    private float           rashMoveSpeed;
     [SerializeField]
-    private float       rashMoveDis;
-    private bool        isRushAttack;
-    private bool        isRashMoveLeft;
+    private float           rashMoveDis;
+    private bool            isRushAttack;
+    private bool            isRashMoveLeft;
 
 
     private void Start()
     {
-        atk = 50;
+        atk = 25;
         hp = 10000;
 
         player = GameObject.Find("Player");
@@ -31,6 +37,7 @@ public class Dragon : Enemy
         sr = this.GetComponent<SpriteRenderer>();
         eCollision = collisionObj[0].GetComponent<EnemyCollision>();
         wallContact = collisionObj[1].GetComponent<WallContact>();
+        fc = collisionObj[2].GetComponent<FloorChecker>();
 
         coolCnt = 0f;
         coolTime = 2f;
@@ -46,6 +53,23 @@ public class Dragon : Enemy
         state = EnemyState.Wait;
 
         fireBall = (GameObject)Resources.Load("FireBall");
+        hitCollisions = new GameObject[9];
+        hitCollisions[0] = transform.Find("HitCollision_Body").gameObject;
+        hitCollisions[1] = transform.Find("HitCollision_Head").gameObject;
+        hitCollisions[2] = transform.Find("HitCollision_Neck").gameObject;
+        hitCollisions[3] = transform.Find("HitCollision_Wing").gameObject;
+        hitCollisions[4] = transform.Find("HitCollision_Tail").gameObject;
+        hitCollisions[5] = transform.Find("HitCollision_LegL/Up").gameObject;
+        hitCollisions[6] = transform.Find("HitCollision_LegR/Up").gameObject;
+        hitCollisions[7] = transform.Find("HitCollision_Leg2L/Up").gameObject;
+        hitCollisions[8] = transform.Find("HitCollision_Leg2R/Up").gameObject;
+
+        SetCollisionIsTrigger(false);
+
+        rb2 = GetComponent<Rigidbody2D>();
+
+        collisionObj[3].SetActive(false);
+
         disTwoPoints = 0;
         nextAttackTime = 5f;
         attackTimeCnt = 0f;
@@ -56,20 +80,23 @@ public class Dragon : Enemy
         isRashMoveLeft = false;
     }
 
+    private void FixedUpdate()
+    {
+        if (fc.isFloor)
+        {
+            rb2.gravityScale = 0;
+        }
+        else
+        {
+            rb2.gravityScale = 1f;
+        }
+    }
+
     private void Update()
     {
         disTwoPoints = player.transform.position.x - this.transform.position.x;
 
         if (!isAttack) AttackStateChange();
-
-        //CoolTime();
-
-        //TrackingJudgment();
-
-        //if (!isCoolDown && eCollision.isInvasion)
-        //{
-        //    StateChange(EnemyState.Attack);
-        //}
 
         switch (state)
         {
@@ -139,12 +166,23 @@ public class Dragon : Enemy
         //
         if (eCollision.isInvasion)
         {
+            collisionObj[3].SetActive(true);
+            SetCollisionIsTrigger(true);
             isRushAttack = true;
             return;
         }
         //çUåÇîªíËäOÇÃèÍçáÉuÉåÉXçUåÇ
         else
         {
+            if (dir == Direction.Left)
+            {
+                if (transform.position.x < player.transform.position.x) return;
+            }
+            else if (dir == Direction.Right)
+            {
+                if (transform.position.x > player.transform.position.x) return;
+            }
+
             StartCoroutine(Attack());
         }
     }
@@ -166,8 +204,6 @@ public class Dragon : Enemy
         else if(rashMovePhase == 1 || rashMovePhase == 3)
         {
             anim.SetBool("isMove", true);
-
-            Debug.Log(wallContact.getContact);
 
             if (!wallContact.getContact)
             {
@@ -199,8 +235,11 @@ public class Dragon : Enemy
         else
         {
             isAttack = false;
+            isRushAttack = false;
             rashMovePhase = 0;
             rashMoveDis = 0f;
+            SetCollisionIsTrigger(false);
+            collisionObj[3].SetActive(false);
             StateChange(EnemyState.Move);
         }
     }
@@ -216,6 +255,15 @@ public class Dragon : Enemy
         else
         {
             attackTimeCnt += Time.deltaTime;
+        }
+    }
+
+    private void SetCollisionIsTrigger(bool _val)
+    {
+        foreach(GameObject obj in hitCollisions)
+        {
+            BoxCollider2D bx2 = obj.GetComponent<BoxCollider2D>();
+            bx2.isTrigger = _val;
         }
     }
 
