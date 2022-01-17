@@ -44,9 +44,9 @@ public class Player : MonoBehaviour
 
     //弾関連の定数
     private const int ShotType = 4;                //ショットの種類
-    private readonly int[] CoolTime = { 10,15,5,1 };   //ショットのクールタイム配列
-    private readonly int[] ShotPower = { 10,45,10,20 };　 //ショットの攻撃力配列
-    private readonly int[] ShotSpeed = { 20,10,20,15 };  //弾の速度配列
+    private readonly int[] CoolTime = { 10, 15, 5, 1 };   //ショットのクールタイム配列
+    private readonly int[] ShotPower = { 10, 45, 10, 20 };　 //ショットの攻撃力配列
+    private readonly int[] ShotSpeed = { 20, 10, 20, 15 };  //弾の速度配列
 
     //フレームカウント
     private int count;
@@ -59,6 +59,9 @@ public class Player : MonoBehaviour
     GameObject _floorContact;
     FloorContact scr_FloorContact;
 
+    public bool getIsAcive{
+        get { return isActive; }    
+    }
     public int getHP
     {
         get { return hp; }
@@ -97,6 +100,7 @@ public class Player : MonoBehaviour
 
         //ステータス
         isActive = true;
+        anim.SetBool("IsActive", isActive);
         hp = 225;
         speed = 0.05f;
         jumpPower = 280.0f;
@@ -310,7 +314,13 @@ public class Player : MonoBehaviour
             damage = 0;
         }
 
-        if (hp <= 0) isActive = false;
+        if (hp <= 0) GameOver();
+    }
+
+    void GameOver()
+    {
+        isActive = false;
+        anim.SetBool("IsActive", isActive);
     }
 
 }

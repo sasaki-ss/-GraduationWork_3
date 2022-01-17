@@ -118,6 +118,12 @@ public class UIManager : MonoBehaviour
     GameObject _player;
     Slider _hp;
     Image _shotSelect;
+    GameObject _mainCamera;
+    RectTransform _gameOverPanel;
+    Button _retry;
+    Button _exit2;
+    AsyncOperation _retryAsync;
+
 
     public Sprite img0;
     public Sprite img1;
@@ -131,7 +137,12 @@ public class UIManager : MonoBehaviour
         _shotSelect = GameObject.Find("ShotSelect").GetComponent<Image>();
         _hp.maxValue = _player.GetComponent<Player>().getHP;
         _hp.value = _player.GetComponent<Player>().getHP;
-
+        _mainCamera = GameObject.Find("Main Camera");
+        _gameOverPanel = GameObject.Find("Panel").GetComponent<RectTransform>();
+        _retry = GameObject.Find("RetryButton").GetComponent<Button>();
+        _exit2 = GameObject.Find("ExitButton").GetComponent<Button>();
+        _retryAsync = SceneManager.LoadSceneAsync("Stage01");
+        _retryAsync.allowSceneActivation = false;
     }
 
     void InGameUpdate()
@@ -154,6 +165,22 @@ public class UIManager : MonoBehaviour
             case 3:
                 _shotSelect.sprite = img3;
                 break;
+        }
+
+        if (!_player.GetComponent<Player>().getIsAcive)
+        {
+            _gameOverPanel.localPosition = new Vector3(_mainCamera.transform.position.x,_mainCamera.transform.position.y,0);
+
+            _retry.onClick.AddListener(() =>
+            {
+                _retryAsync.allowSceneActivation = true;
+            });
+
+            _exit2.onClick.AddListener(() =>
+            {
+                SceneManager.LoadScene("Title");
+            });
+
         }
     }
 
