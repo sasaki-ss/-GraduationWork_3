@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Wizard : Enemy
 {
+    private GameObject  fireBall;
+    private float       disTwoPoints;
+
     private void Start()
     {
         player = GameObject.Find("Player");
@@ -24,10 +27,16 @@ public class Wizard : Enemy
         dir = Direction.Left;
         beforeState = EnemyState.Wait;
         state = EnemyState.Wait;
+
+        fireBall = (GameObject)Resources.Load("FireBall");
+        itemObj = (GameObject)Resources.Load("Item");
+        disTwoPoints = 0;
     }
 
     private void Update()
     {
+        disTwoPoints = player.transform.position.x - this.transform.position.x;
+
         CoolTime();
 
         TrackingJudgment();
@@ -67,5 +76,18 @@ public class Wizard : Enemy
                 Tracking();
                 break;
         }
+
+    }
+
+    public void CreateFireBall()
+    {
+        GameObject obj = Instantiate(fireBall,
+            this.transform.position,
+            Quaternion.Euler(0f, 0f, 270f));
+
+        FireBall fb = obj.GetComponent<FireBall>();
+
+        fb.Init(disTwoPoints);
+        fb.SetScale(new Vector3(0.05f, 0.05f, 1f));
     }
 }

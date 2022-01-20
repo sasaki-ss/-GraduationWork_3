@@ -59,6 +59,8 @@ public class Enemy : MonoBehaviour
     protected SpriteRenderer    sr;                 //スプライトレンダラー
     protected EnemyCollision    eCollision;         //当たり判定用の処理
     protected WallContact       wallContact;        //壁判定用の処理
+    [SerializeField]
+    protected GameObject        itemObj;            //アイテムオブジェクト
 
     //状態変化処理
     protected void StateChange(EnemyState _state)
@@ -235,6 +237,14 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    public void CreateItem()
+    {
+        if(itemObj != null)
+        {
+            GameObject obj = Instantiate(itemObj, this.transform.position, Quaternion.identity);
+        }
+    }
+
     //ダメージ処理
     public void Damage(int _bulletPow)
     {
@@ -244,6 +254,7 @@ public class Enemy : MonoBehaviour
 
         if(hp <= 0)
         {
+            CreateItem();
             Destroy(this.gameObject);
         }
     }
