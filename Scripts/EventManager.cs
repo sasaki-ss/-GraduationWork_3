@@ -5,6 +5,7 @@ using UnityEngine;
 public enum EventType
 {
     Zombie,
+    Dragon,
 }
 
 public class EventManager : MonoBehaviour
@@ -62,6 +63,9 @@ public class EventManager : MonoBehaviour
             case EventType.Zombie:
                 StartCoroutine(ZombieEvent());
                 break;
+            case EventType.Dragon:
+                DragonEvent();
+                break;
         }
     }
 
@@ -101,6 +105,11 @@ public class EventManager : MonoBehaviour
                 ZombieCreate(new Vector3(playerPos.x + 12.0f, 10.0f, 0f), Quaternion.identity);
             }
         }
+    }
+
+    private void DragonEvent()
+    {
+        GameObject.Find("Dragon").GetComponent<Dragon>().IsActive = true;
     }
 
     private void ZombieCreate(Vector3 _pos, Quaternion _rot)

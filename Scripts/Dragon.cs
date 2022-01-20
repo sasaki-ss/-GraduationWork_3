@@ -25,7 +25,13 @@ public class Dragon : Enemy
     private float           rashMoveDis;
     private bool            isRushAttack;
     private bool            isRashMoveLeft;
+    private bool            isActive;
 
+    public bool IsActive
+    {
+        get { return isActive; }
+        set { isActive = value; }
+    }
 
     private void Start()
     {
@@ -78,6 +84,7 @@ public class Dragon : Enemy
         rashMoveDis = 0;
         isRushAttack = false;
         isRashMoveLeft = false;
+        isActive = false;
     }
 
     private void FixedUpdate()
@@ -94,6 +101,8 @@ public class Dragon : Enemy
 
     private void Update()
     {
+        if (!isActive) return;
+
         disTwoPoints = player.transform.position.x - this.transform.position.x;
 
         if (!isAttack) AttackStateChange();
