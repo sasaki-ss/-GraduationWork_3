@@ -4,12 +4,8 @@ using UnityEngine;
 
 public class EnemyAttackProc : MonoBehaviour
 {
+    [SerializeField]
     GameObject parentObject;    //親オブジェクト
-
-    private void Start()
-    {
-        parentObject = this.transform.root.gameObject;
-    }
 
     private void OnTriggerEnter2D(Collider2D other)
     {

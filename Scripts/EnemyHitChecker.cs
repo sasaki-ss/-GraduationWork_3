@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class EnemyHitChecker : MonoBehaviour
 {
+    [SerializeField]
+    GameObject parentObj;
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.tag == "Bullet")
         {
-            GameObject parentObj = this.transform.root.gameObject;
             parentObj.GetComponent<
                 Enemy>().Damage(other.gameObject.GetComponent<Bullet>().power);
         }
