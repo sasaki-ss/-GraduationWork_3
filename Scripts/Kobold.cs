@@ -40,6 +40,8 @@ public class Kobold : Enemy
         beforeState = EnemyState.Wait;
         state = EnemyState.Wait;
 
+        itemObj = (GameObject)Resources.Load("Item");
+
         moveWaitTime = 1f;
         moveWaitCnt = 0f;
         maxMoveAmount = 5f;

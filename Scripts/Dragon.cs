@@ -58,6 +58,7 @@ public class Dragon : Enemy
         beforeState = EnemyState.Wait;
         state = EnemyState.Wait;
 
+        itemObj = null;
         fireBall = (GameObject)Resources.Load("FireBall");
         hitCollisions = new GameObject[9];
         hitCollisions[0] = transform.Find("HitCollision_Body").gameObject;
