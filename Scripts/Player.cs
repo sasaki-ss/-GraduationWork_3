@@ -6,6 +6,13 @@ public class Player : MonoBehaviour
     SpriteRenderer sr;
     Rigidbody2D rb;
     Animator anim;
+    AudioSource audio;
+
+    //SE
+    public AudioClip SE_jump;
+    public AudioClip SE_shot;
+    public AudioClip SE_damage;
+    public AudioClip SE_change;
 
     //カメラ(移動制限用)
     GameObject mainCam;
@@ -31,6 +38,7 @@ public class Player : MonoBehaviour
     private GameObject MagicArray;  //魔法陣
     private GameObject[] ShotObject;//弾
     private int shotSelect;         //現在選択されてるショット
+    private int nowShotSelect;      //ショット切り替え判定用
     private int cooltime;           //弾発射のクールタイム
     private int bulletCnt;          //弾発射のカウント
     private bool bulletCntFlg;      //カウント開始フラグ
@@ -92,6 +100,7 @@ public class Player : MonoBehaviour
         sr = GetComponent<SpriteRenderer>();
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
+        audio = GetComponent<AudioSource>();
 
         //カメラ
         mainCam = GameObject.Find("Main Camera");
@@ -118,6 +127,7 @@ public class Player : MonoBehaviour
         ShotObject[2] = (GameObject)Resources.Load("shot_0");
         ShotObject[3] = (GameObject)Resources.Load("shot_0");
         shotSelect = 0;
+        nowShotSelect = shotSelect;
         cooltime = 0;
         bulletCnt = 0;
         bulletCntFlg = false;
@@ -152,6 +162,7 @@ public class Player : MonoBehaviour
             Shot();             //ショット
             Count();            //カウント
             Damage();           //ダメージ
+            Shot_Change();      //ショットチェンジ
             if (transform.position.y < -7) isActive = false;
         }
         else Debug.Log("aaa");
@@ -195,6 +206,7 @@ public class Player : MonoBehaviour
             if(jumpCount == 0)jumpCount = 1;        //カウント加算
             if(jumpCount == 1)jumpCount = 2;        //カウント加算
             count = 0;                              //ジャンプのクールタイムリセット
+            audio.PlayOneShot(SE_jump);
         }
 
         if (scr_FloorContact.getFloorContact)
@@ -267,6 +279,8 @@ public class Player : MonoBehaviour
 
         // 弾の攻撃力決定
         shot.GetComponent<Bullet>().power = ShotPower[shotSelect];
+
+        audio.PlayOneShot(SE_shot);
     }
 
     void Shot_1()
@@ -308,6 +322,7 @@ public class Player : MonoBehaviour
             hp -= damage;            //ダメージ
             hitFlg = false;          //フラグリセット
             hitCount = INVINCIBLE;   //無敵時間
+            audio.PlayOneShot(SE_damage);
         }
         else
         {
@@ -315,6 +330,15 @@ public class Player : MonoBehaviour
         }
 
         if (hp <= 0) GameOver();
+    }
+
+    void Shot_Change()
+    {
+        if(shotSelect != nowShotSelect)
+        {
+            audio.PlayOneShot(SE_change);
+            nowShotSelect = shotSelect;
+        }
     }
 
     void GameOver()
