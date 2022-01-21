@@ -68,6 +68,9 @@ public class Player : MonoBehaviour
     GameObject _floorContact;
     FloorContact scr_FloorContact;
 
+    //ゲームマネージャー
+    GameManager _gameManager;
+
     public bool getIsAcive{
         get { return isActive; }    
     }
@@ -152,12 +155,14 @@ public class Player : MonoBehaviour
         //床判定
         _floorContact = transform.Find("Contact_Down").gameObject;
         scr_FloorContact = _floorContact.GetComponent<FloorContact>();
+
+        _gameManager = GameObject.Find("SystemObj(Clone)").GetComponent<GameManager>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (isActive)
+        if (isActive && !_gameManager.IsClear)
         {   //アクティブ状態の時
             Walk();             //歩く
             Jump();             //ジャンプ
