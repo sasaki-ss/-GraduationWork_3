@@ -317,12 +317,11 @@ public class Player : MonoBehaviour
     void Damage()
     {
         if (hitFlg && hitCount < 0)
-        {   //敵の攻撃が当たった時 ヒットカウントが60以上の時
-            
+        {   //敵の攻撃が当たった時 ヒットカウントが0以下(INVICIBLEの時間内)の時
+            audio.PlayOneShot(SE_damage);
             hp -= damage;            //ダメージ
             hitFlg = false;          //フラグリセット
             hitCount = INVINCIBLE;   //無敵時間
-            audio.PlayOneShot(SE_damage);
         }
         else
         {
