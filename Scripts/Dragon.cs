@@ -118,6 +118,10 @@ public class Dragon : Enemy
                     {
                         StartCoroutine(Wait(waitTime / 2));
                     }
+                    else if(beforeState == EnemyState.Move)
+                    {
+                        StartCoroutine(Wait(waitTime / 10));
+                    }
                     else
                     {
                         StartCoroutine(Wait(waitTime));
@@ -149,12 +153,12 @@ public class Dragon : Enemy
         if (!wallContact.getContact)
         {
             //disTwoPoints‚ª-‚È‚ç¶‚ÖA+‚È‚ç‰E‚ÖˆÚ“®A0‚Ìê‡ˆÚ“®‚µ‚È‚¢
-            if (disTwoPoints < 0)
+            if (disTwoPoints < -0.1)
             {
                 this.transform.position -= new Vector3(moveSpeed, 0f, 0f);
                 Inversion(Direction.Left);
             }
-            else if (disTwoPoints > 0)
+            else if (disTwoPoints > 0.1)
             {
                 this.transform.position += new Vector3(moveSpeed, 0f, 0f);
                 Inversion(Direction.Right);
@@ -166,6 +170,16 @@ public class Dragon : Enemy
         }
         else
         {
+            if(dir == Direction.Left)
+            {
+                Inversion(Direction.Right);
+            }
+            else if(dir == Direction.Right)
+            {
+                Inversion(Direction.Left);
+            }
+
+            StateChange(EnemyState.Wait);
             anim.SetBool("isMove", false);
             return;
         }
@@ -192,7 +206,7 @@ public class Dragon : Enemy
         {
             if (dir == Direction.Left)
             {
-                if (transform.position.x > player.transform.position.x)
+                if (transform.position.x - 0.5 > player.transform.position.x)
                 {
                     StartCoroutine(Attack());
                     return;
@@ -200,7 +214,7 @@ public class Dragon : Enemy
             }
             else if (dir == Direction.Right)
             {
-                if (transform.position.x < player.transform.position.x)
+                if (transform.position.x - 0.5 < player.transform.position.x)
                 {
                     StartCoroutine(Attack());
                     return;
