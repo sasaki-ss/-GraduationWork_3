@@ -118,6 +118,10 @@ public class Dragon : Enemy
                     {
                         StartCoroutine(Wait(waitTime / 2));
                     }
+                    else if(beforeState == EnemyState.Move)
+                    {
+                        StartCoroutine(Wait(waitTime / 10));
+                    }
                     else
                     {
                         StartCoroutine(Wait(waitTime));
@@ -149,12 +153,12 @@ public class Dragon : Enemy
         if (!wallContact.getContact)
         {
             //disTwoPointsÇ™-Ç»ÇÁç∂Ç÷ÅA+Ç»ÇÁâEÇ÷à⁄ìÆÅA0ÇÃèÍçáà⁄ìÆÇµÇ»Ç¢
-            if (disTwoPoints < 0)
+            if (disTwoPoints < -0.1)
             {
                 this.transform.position -= new Vector3(moveSpeed, 0f, 0f);
                 Inversion(Direction.Left);
             }
-            else if (disTwoPoints > 0)
+            else if (disTwoPoints > 0.1)
             {
                 this.transform.position += new Vector3(moveSpeed, 0f, 0f);
                 Inversion(Direction.Right);
@@ -166,6 +170,16 @@ public class Dragon : Enemy
         }
         else
         {
+            if(dir == Direction.Left)
+            {
+                Inversion(Direction.Right);
+            }
+            else if(dir == Direction.Right)
+            {
+                Inversion(Direction.Left);
+            }
+
+            StateChange(EnemyState.Wait);
             anim.SetBool("isMove", false);
             return;
         }
@@ -176,6 +190,12 @@ public class Dragon : Enemy
         //
         if (eCollision.isInvasion)
         {
+            if (wallContact.getContact)
+            {
+                StartCoroutine(Attack());
+                return;
+            }
+
             collisionObj[3].SetActive(true);
             SetCollisionIsTrigger(true);
             isRushAttack = true;
@@ -186,14 +206,23 @@ public class Dragon : Enemy
         {
             if (dir == Direction.Left)
             {
-                if (transform.position.x < player.transform.position.x) return;
+                if (transform.position.x - 0.5 > player.transform.position.x)
+                {
+                    StartCoroutine(Attack());
+                    return;
+                }
             }
             else if (dir == Direction.Right)
             {
-                if (transform.position.x > player.transform.position.x) return;
+                if (transform.position.x - 0.5 < player.transform.position.x)
+                {
+                    StartCoroutine(Attack());
+                    return;
+                }
             }
 
-            StartCoroutine(Attack());
+            isAttack = false;
+            StateChange(EnemyState.Move);
         }
     }
 
@@ -231,6 +260,8 @@ public class Dragon : Enemy
             else
             {
                 anim.SetBool("isMove", false);
+                rashMovePhase = 4;
+                return;
             }
 
             rashMoveDis += rashMoveSpeed;
