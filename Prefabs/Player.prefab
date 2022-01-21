@@ -239,7 +239,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dc257b261e5d9b41b8877d2e8e0affb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SE_jump: {fileID: 8300000, guid: 3c9e1e0d576022c4a87ebf63000bf0e5, type: 3}
+  SE_jump: {fileID: 8300000, guid: 9b8dae53854e997419734fac7072a7f5, type: 3}
   SE_shot: {fileID: 8300000, guid: 3f38640274a2b714a8b7a74e56c04cc1, type: 3}
   SE_damage: {fileID: 8300000, guid: b56faf374eb1b8f49a236a1759d0e624, type: 3}
   SE_change: {fileID: 8300000, guid: 70e21e46f56245948ab8ee809da2e976, type: 3}
