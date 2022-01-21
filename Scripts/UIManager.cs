@@ -115,12 +115,16 @@ public class UIManager : MonoBehaviour
     #region InGame
     //ゲームシーン関連の処理
 
+    GameManager _gameManager;
     GameObject _player;
     Slider _hp;
     Image _shotSelect;
     RectTransform _gameOverPanel;
+    RectTransform _clearPanel;
     Button _retry;
     Button _exit2;
+    Button _next;
+    Button _exit3;
     AsyncOperation _retryAsync;
 
 
@@ -131,14 +135,18 @@ public class UIManager : MonoBehaviour
 
     void InGameInit()
     {
+        _gameManager = GameObject.Find("SystemObj(Clone)").GetComponent<GameManager>();
         _player = GameObject.Find("Player");
         _hp = GameObject.Find("HP").GetComponent<Slider>();
         _shotSelect = GameObject.Find("ShotSelect").GetComponent<Image>();
         _hp.maxValue = _player.GetComponent<Player>().getHP;
         _hp.value = _player.GetComponent<Player>().getHP;
         _gameOverPanel = GameObject.Find("Panel").GetComponent<RectTransform>();
+        _clearPanel = GameObject.Find("ClearPanel").GetComponent<RectTransform>();
         _retry = GameObject.Find("RetryButton").GetComponent<Button>();
         _exit2 = GameObject.Find("ExitButton").GetComponent<Button>();
+        //_next = GameObject.Find("NextButton").GetComponent<Button>();
+        _exit3 = GameObject.Find("ExitButton2").GetComponent<Button>();
         _retryAsync = SceneManager.LoadSceneAsync("Stage01");
         _retryAsync.allowSceneActivation = false;
     }
@@ -178,7 +186,20 @@ public class UIManager : MonoBehaviour
             {
                 SceneManager.LoadScene("Title");
             });
+        }
 
+        if (_gameManager.IsClear)
+        {
+            _clearPanel.localPosition = new Vector3(0, 0, 0);
+
+            //_next.onClick.AddListener(() => { 
+            //    //次のステージへシーン遷移する
+            //});
+
+            _exit3.onClick.AddListener(() =>
+            {
+                SceneManager.LoadScene("Title");
+            });
         }
     }
 
