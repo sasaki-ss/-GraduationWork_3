@@ -8678,6 +8678,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1431544917129433706}
     m_Modifications:
+    - target: {fileID: 1995658989, guid: 0d08fa7c3e1ac3344a582d6848643bad, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.679
+      objectReference: {fileID: 0}
+    - target: {fileID: 1995658991, guid: 0d08fa7c3e1ac3344a582d6848643bad, type: 3}
+      propertyPath: m_Size.x
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 95929105666070413, guid: 0d08fa7c3e1ac3344a582d6848643bad, type: 3}
       propertyPath: m_Name
       value: Dragon
