@@ -24,6 +24,7 @@ public class Player : MonoBehaviour
     //ステータス
     private bool isActive;      //アクティブ状態
     private int hp;             //体力
+    private int nowHP;          //ダメージ判定用
     private float speed;        //移動速度
     private float jumpPower;    //ジャンプの高さ
     private int jumpCount;      //ジャンプ回数のカウント
@@ -52,8 +53,8 @@ public class Player : MonoBehaviour
 
     //弾関連の定数
     private const int ShotType = 4;                //ショットの種類
-    private readonly int[] CoolTime = { 10, 15, 5, 1 };   //ショットのクールタイム配列
-    private readonly int[] ShotPower = { 10, 45, 10, 20 };　 //ショットの攻撃力配列
+    private readonly int[] CoolTime = { 5, 10, 3, 1 };   //ショットのクールタイム配列
+    private readonly int[] ShotPower = { 25, 75, 15, 30 };　 //ショットの攻撃力配列
     private readonly int[] ShotSpeed = { 20, 10, 20, 15 };  //弾の速度配列
 
     //フレームカウント
@@ -111,6 +112,7 @@ public class Player : MonoBehaviour
         isActive = true;
         anim.SetBool("IsActive", isActive);
         hp = 225;
+        nowHP = hp;
         speed = 0.05f;
         jumpPower = 280.0f;
         jumpCount = 0;
@@ -162,7 +164,7 @@ public class Player : MonoBehaviour
             Shot();             //ショット
             Count();            //カウント
             Damage();           //ダメージ
-            Shot_Change();      //ショットチェンジ
+            Number_Change();    //値を判定してSEを鳴らす
             if (transform.position.y < -7) isActive = false;
         }
         else Debug.Log("aaa");
@@ -318,7 +320,7 @@ public class Player : MonoBehaviour
     {
         if (hitFlg && hitCount < 0)
         {   //敵の攻撃が当たった時 ヒットカウントが0以下(INVICIBLEの時間内)の時
-            audio.PlayOneShot(SE_damage);
+            
             hp -= damage;            //ダメージ
             hitFlg = false;          //フラグリセット
             hitCount = INVINCIBLE;   //無敵時間
@@ -331,12 +333,18 @@ public class Player : MonoBehaviour
         if (hp <= 0) GameOver();
     }
 
-    void Shot_Change()
-    {
+    void Number_Change()
+    {   //各値を監視して変化があった場合SEを鳴らす
         if(shotSelect != nowShotSelect)
         {
             audio.PlayOneShot(SE_change);
             nowShotSelect = shotSelect;
+        }
+
+        if(hp != nowHP)
+        {
+            audio.PlayOneShot(SE_damage);
+            nowHP = hp;
         }
     }
 
