@@ -176,6 +176,12 @@ public class Dragon : Enemy
         //
         if (eCollision.isInvasion)
         {
+            if (wallContact.getContact)
+            {
+                StartCoroutine(Attack());
+                return;
+            }
+
             collisionObj[3].SetActive(true);
             SetCollisionIsTrigger(true);
             isRushAttack = true;
@@ -186,14 +192,23 @@ public class Dragon : Enemy
         {
             if (dir == Direction.Left)
             {
-                if (transform.position.x < player.transform.position.x) return;
+                if (transform.position.x > player.transform.position.x)
+                {
+                    StartCoroutine(Attack());
+                    return;
+                }
             }
             else if (dir == Direction.Right)
             {
-                if (transform.position.x > player.transform.position.x) return;
+                if (transform.position.x < player.transform.position.x)
+                {
+                    StartCoroutine(Attack());
+                    return;
+                }
             }
 
-            StartCoroutine(Attack());
+            isAttack = false;
+            StateChange(EnemyState.Move);
         }
     }
 
@@ -231,6 +246,8 @@ public class Dragon : Enemy
             else
             {
                 anim.SetBool("isMove", false);
+                rashMovePhase = 4;
+                return;
             }
 
             rashMoveDis += rashMoveSpeed;

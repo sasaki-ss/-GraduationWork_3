@@ -43,6 +43,17 @@ public class EventManager : MonoBehaviour
                         FollowCamera>().SetMoveFlg = true;
                 }
             }
+
+            if(nowEventNum == EventType.Dragon)
+            {
+                if(defeatNum == 1)
+                {
+                    isRunEvent = false;
+                    defeatNum = 0;
+                    GameObject.Find("Main Camera").GetComponent<
+                        FollowCamera>().SetMoveFlg = true;
+                }
+            }
         }
     }
 

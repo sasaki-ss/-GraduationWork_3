@@ -41,6 +41,7 @@ public class Enemy : MonoBehaviour
     protected bool              isAttack;           //攻撃フラグ
     protected bool              isTracking;         //追跡フラグ
 
+    [SerializeField]
     protected Direction         dir;                //方向
 
     protected EnemyState        beforeState =
@@ -249,8 +250,6 @@ public class Enemy : MonoBehaviour
     public void Damage(int _bulletPow)
     {
         hp -= (_bulletPow - def);
-
-        Debug.Log("ダメージ!! now HP = " + hp);
 
         if(hp <= 0)
         {
