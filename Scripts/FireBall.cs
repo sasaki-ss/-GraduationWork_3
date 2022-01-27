@@ -10,7 +10,7 @@ public class FireBall : MonoBehaviour
     private Vector3 scale;
 
     //‰Šú‰»ˆ—
-    private void Start()
+    private void Awake()
     {
         moveSpeed = 0.2f;
     }
@@ -51,6 +51,11 @@ public class FireBall : MonoBehaviour
         transform.localScale = scale;
     }
 
+    public void SetMoveSpeed(float _moveSpeed)
+    {
+        moveSpeed = _moveSpeed;
+    }
+
     //“–‚½‚è”»’èˆ—
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -61,7 +66,12 @@ public class FireBall : MonoBehaviour
             player.SetHitFlg = true;
             player.SetDamage = 50;
 
-            Destroy(this.gameObject);
+            Destroy(gameObject);
+        }
+
+        if(other.gameObject.tag == "Floor")
+        {
+            Destroy(gameObject);
         }
     }
 }

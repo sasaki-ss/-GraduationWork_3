@@ -20,6 +20,7 @@ public class Kobold : Enemy
 
         player = GameObject.Find("Player");
         anim = this.GetComponent<Animator>();
+        aSrc = this.GetComponent<AudioSource>();
         sr = this.GetComponent<SpriteRenderer>();
         eCollision = collisionObj[0].GetComponent<EnemyCollision>();
         wallContact = collisionObj[1].GetComponent<WallContact>();
@@ -171,5 +172,11 @@ public class Kobold : Enemy
             nowMoveAmount = 0f;
             isMoveWait = true;
         }
+    }
+
+    void PlaySlashSound()
+    {
+        aSrc.PlayOneShot(ac[0]);
+        aSrc.PlayOneShot(ac[ac.Length - 1]);
     }
 }

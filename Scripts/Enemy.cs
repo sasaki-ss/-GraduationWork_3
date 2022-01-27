@@ -57,6 +57,9 @@ public class Enemy : MonoBehaviour
     protected GameObject[]      collisionObj;       //当たり判定オブジェクト
     protected GameObject        player;             //プレイヤーオブジェクト
     protected Animator          anim;               //アニメーター
+    protected AudioSource       aSrc;               //オーディオソース
+    [SerializeField]
+    protected AudioClip[]       ac;                 //オーディオCLIP
     protected SpriteRenderer    sr;                 //スプライトレンダラー
     protected EnemyCollision    eCollision;         //当たり判定用の処理
     protected WallContact       wallContact;        //壁判定用の処理
@@ -253,6 +256,7 @@ public class Enemy : MonoBehaviour
 
         if(hp <= 0)
         {
+            //aSrc.PlayOneShot(ac[ac.Length - 1]);
             CreateItem();
             Destroy(this.gameObject);
         }
