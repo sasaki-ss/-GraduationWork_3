@@ -79,8 +79,7 @@ public class UIManager : MonoBehaviour
         _exit.onClick.AddListener(() =>
         {
             //I—¹ˆ—
-            if(Application.isEditor) UnityEditor.EditorApplication.isPlaying = false;
-            else Application.Quit();
+            Application.Quit();
         });
 
         _back.onClick.AddListener(() =>
