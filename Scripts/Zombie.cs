@@ -30,7 +30,8 @@ public class Zombie : Enemy
         isTracking = false;
         dir = Direction.Left;
 
-        itemObj = (GameObject)Resources.Load("Item");
+        //itemObj = (GameObject)Resources.Load("Item");
+        itemObj = null;
     }
 
     private void Update()

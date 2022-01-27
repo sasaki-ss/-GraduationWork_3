@@ -72,6 +72,11 @@ public class Dragon : Enemy
         hitCollisions[7] = transform.Find("HitCollision_Leg2L/Up").gameObject;
         hitCollisions[8] = transform.Find("HitCollision_Leg2R/Up").gameObject;
 
+        foreach(GameObject obj in hitCollisions)
+        {
+            obj.SetActive(false);
+        }
+
         SetCollisionIsTrigger(false);
 
         rb2 = GetComponent<Rigidbody2D>();
@@ -333,5 +338,13 @@ public class Dragon : Enemy
         obj.GetComponent<FireBall>().Init(disTwoPoints);
 
         aSrc.PlayOneShot(ac[0]);
+    }
+
+    public void SetCollision()
+    {
+        foreach(GameObject obj in hitCollisions)
+        {
+            obj.SetActive(true);
+        }
     }
 }
