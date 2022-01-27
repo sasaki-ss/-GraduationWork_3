@@ -9,6 +9,7 @@ public class Zombie : Enemy
     {
         player = GameObject.Find("Player");
         anim = this.GetComponent<Animator>();
+        aSrc = this.GetComponent<AudioSource>();
         sr = this.GetComponent<SpriteRenderer>();
         eCollision = collisionObj[0].GetComponent<EnemyCollision>();
         wallContact = collisionObj[1].GetComponent<WallContact>();
@@ -103,5 +104,10 @@ public class Zombie : Enemy
 
                 break;
         }
+    }
+
+    public void PlayAttckSound()
+    {
+        aSrc.PlayOneShot(ac[0]);
     }
 }

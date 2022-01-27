@@ -245,7 +245,12 @@ public class Enemy : MonoBehaviour
     {
         if(itemObj != null)
         {
-            GameObject obj = Instantiate(itemObj, this.transform.position, Quaternion.identity);
+            int randNum = Random.Range(0, 100);
+
+            if(randNum % 3 == 0)
+            {
+                GameObject obj = Instantiate(itemObj, this.transform.position, Quaternion.identity);
+            }
         }
     }
 
@@ -253,6 +258,8 @@ public class Enemy : MonoBehaviour
     public void Damage(int _bulletPow)
     {
         hp -= (_bulletPow - def);
+
+        Debug.Log("Enemy HP : "+hp);
 
         if(hp <= 0)
         {
