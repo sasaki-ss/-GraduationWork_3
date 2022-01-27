@@ -40,6 +40,7 @@ public class Dragon : Enemy
 
         player = GameObject.Find("Player");
         anim = this.GetComponent<Animator>();
+        aSrc = this.GetComponent<AudioSource>();
         sr = this.GetComponent<SpriteRenderer>();
         eCollision = collisionObj[0].GetComponent<EnemyCollision>();
         wallContact = collisionObj[1].GetComponent<WallContact>();
@@ -150,6 +151,12 @@ public class Dragon : Enemy
     {
         anim.SetBool("isMove", true);
 
+        if (!aSrc.isPlaying)
+        {
+            aSrc.clip = ac[2];
+            aSrc.Play();
+        }
+
         if (!wallContact.getContact)
         {
             //disTwoPointsÇ™-Ç»ÇÁç∂Ç÷ÅA+Ç»ÇÁâEÇ÷à⁄ìÆÅA0ÇÃèÍçáà⁄ìÆÇµÇ»Ç¢
@@ -166,6 +173,7 @@ public class Dragon : Enemy
             else
             {
                 anim.SetBool("isMove", false);
+                if (aSrc.isPlaying) aSrc.Stop();
             }
         }
         else
@@ -181,6 +189,7 @@ public class Dragon : Enemy
 
             StateChange(EnemyState.Wait);
             anim.SetBool("isMove", false);
+            if (aSrc.isPlaying) aSrc.Stop();
             return;
         }
     }
@@ -198,6 +207,7 @@ public class Dragon : Enemy
 
             collisionObj[3].SetActive(true);
             SetCollisionIsTrigger(true);
+            if (aSrc.isPlaying) aSrc.Stop();
             isRushAttack = true;
             return;
         }
@@ -243,6 +253,11 @@ public class Dragon : Enemy
         else if(rashMovePhase == 1 || rashMovePhase == 3)
         {
             anim.SetBool("isMove", true);
+            if (!aSrc.isPlaying)
+            {
+                aSrc.clip = ac[1];
+                aSrc.Play();
+            }
 
             if (!wallContact.getContact)
             {
@@ -279,6 +294,7 @@ public class Dragon : Enemy
             isRushAttack = false;
             rashMovePhase = 0;
             rashMoveDis = 0f;
+            if (aSrc.isPlaying) aSrc.Stop();
             SetCollisionIsTrigger(false);
             collisionObj[3].SetActive(false);
             StateChange(EnemyState.Move);
@@ -315,5 +331,7 @@ public class Dragon : Enemy
             this.transform.Find("FiringPoint").transform.position,
             Quaternion.Euler(0f, 0f, 270f));
         obj.GetComponent<FireBall>().Init(disTwoPoints);
+
+        aSrc.PlayOneShot(ac[0]);
     }
 }

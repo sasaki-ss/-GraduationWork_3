@@ -11,6 +11,7 @@ public class Wizard : Enemy
     {
         player = GameObject.Find("Player");
         anim = this.GetComponent<Animator>();
+        aSrc = this.GetComponent<AudioSource>();
         sr = this.GetComponent<SpriteRenderer>();
         eCollision = collisionObj[0].GetComponent<EnemyCollision>();
         wallContact = collisionObj[1].GetComponent<WallContact>();
@@ -89,5 +90,8 @@ public class Wizard : Enemy
 
         fb.Init(disTwoPoints);
         fb.SetScale(new Vector3(0.05f, 0.05f, 1f));
+        fb.SetMoveSpeed(0.1f);
+
+        aSrc.PlayOneShot(ac[0]);
     }
 }
