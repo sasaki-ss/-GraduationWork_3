@@ -17,8 +17,8 @@ public class Zombie : Enemy
         collisionObj[2].SetActive(false);
 
         atk = 10;
-        hp = 30;
-        def = 5;
+        hp = 90;
+        def = 1;
 
         coolCnt = 0f;
         coolTime = 1f;

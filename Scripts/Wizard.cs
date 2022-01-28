@@ -9,6 +9,10 @@ public class Wizard : Enemy
 
     private void Start()
     {
+        hp = 100;
+        atk = 15;
+        def = 2;
+
         player = GameObject.Find("Player");
         anim = this.GetComponent<Animator>();
         aSrc = this.GetComponent<AudioSource>();

@@ -123,6 +123,8 @@ public class EventManager : MonoBehaviour
         Dragon dragon = GameObject.Find("Dragon").GetComponent<Dragon>();
         dragon.IsActive = true;
         dragon.SetCollision();
+
+        GameObject.Find("BGM").GetComponent<BGM>().ChangeBossBGM();
     }
 
     private void ZombieCreate(Vector3 _pos, Quaternion _rot)

@@ -36,7 +36,8 @@ public class Dragon : Enemy
     private void Start()
     {
         atk = 25;
-        hp = 10000;
+        hp = 7500;
+        def = 5;
 
         player = GameObject.Find("Player");
         anim = this.GetComponent<Animator>();

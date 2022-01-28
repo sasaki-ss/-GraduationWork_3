@@ -247,7 +247,7 @@ public class Enemy : MonoBehaviour
         {
             int randNum = Random.Range(0, 100);
 
-            if(randNum % 3 == 0)
+            if(randNum % 2 == 0)
             {
                 GameObject obj = Instantiate(itemObj, this.transform.position, Quaternion.identity);
             }
